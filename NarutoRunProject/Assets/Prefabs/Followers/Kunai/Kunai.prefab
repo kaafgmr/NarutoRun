@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee48c843d4c9de4a820f7b833a2ad00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 40
 --- !u!114 &-53021436555630355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,8 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c0fdc95877893e4ebbed57bd8e8250b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChildRotation: {fileID: 6384837404144854688}
-  Picked: 0
+  picked: 0
+  damage: 1
 --- !u!95 &897990628113212072
 Animator:
   serializedVersion: 4

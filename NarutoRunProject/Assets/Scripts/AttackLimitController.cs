@@ -2,14 +2,12 @@ using UnityEngine;
 
 public class AttackLimitController : MonoBehaviour
 {
-    public Rigidbody player;
-
     private void OnTriggerEnter(Collider collision)
     {
-        if (collision.gameObject.TryGetComponent<SpringJoint>(out SpringJoint SP))
-        {
-            DisappearEffect.Instance.Disappear(SP.transform);
-            FollowerCounter.Instance.subtractFollowers(1, collision.gameObject);
-        }
+        if (!collision.gameObject.TryGetComponent(out FollowerBehaviour FB)) return;
+        if (!FB.GetIsAttacking()) return;
+        
+        DisappearEffect.Instance.Disappear(FB.transform);
+        FollowerCounter.instance.SubtractFollower(FB.gameObject);
     }
 }

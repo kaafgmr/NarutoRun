@@ -2,30 +2,32 @@ using UnityEngine;
 
 public class ObjectsMoveBehaviour : MonoBehaviour
 {
-    private float Speed = 40;
+    [SerializeField] private float speed = 40;
+
     private MovementBehaviour MB;
-    private bool CanMove;
+    private bool canMove;
 
     void Start()
     {
         MB = GetComponent<MovementBehaviour>();
-        CanMove = true;
+        MB.Init(speed);
+        canMove = true;
     }
 
     void Update()
     {
-        if(CanMove)
+        if(canMove)
         {
-            MB.MoveVelocity(Vector3.back * Speed);
+            MB.MoveRB3D(Vector3.back);
         }
         else
         {
-            MB.MoveVelocity(Vector3.back * 0);
+            MB.MoveVelocity(Vector3.zero);
         }
     }
 
     public void SetCanMove(bool value)
     {
-        CanMove = value;
+        canMove = value;
     }
 }

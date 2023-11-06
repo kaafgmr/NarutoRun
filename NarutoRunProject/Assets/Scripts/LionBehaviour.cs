@@ -23,7 +23,7 @@ public class LionBehaviour : MonoBehaviour
 
     public void HitFollower(GameObject Follower)
     {
-        FollowerCounter.Instance.subtractFollowers(1, Follower);
+        FollowerCounter.instance.SubtractFollower(Follower);
         if (AudioManager.instance != null)
             AudioManager.instance.PlaySound("KunaiHit");
     }

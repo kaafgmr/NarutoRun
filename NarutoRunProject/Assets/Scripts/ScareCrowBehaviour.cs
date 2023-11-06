@@ -15,14 +15,11 @@ public class ScareCrowBehaviour : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.TryGetComponent<FollowerBehaviour>(out FollowerBehaviour FB))
-        {
-            if(FB.getIsAttacking())
-            {
-                HB.GetHurt(1);
-                DisappearEffect.Instance.Disappear(transform);
-                FollowerCounter.Instance.subtractFollowers(1, collision.gameObject);
-            }
-        }
+        if (!collision.gameObject.TryGetComponent(out FollowerBehaviour FB)) return;
+        if (!FB.GetIsAttacking()) return;
+        
+        HB.GetHurt(FB.damage);
+        DisappearEffect.Instance.Disappear(transform);
+        FollowerCounter.instance.SubtractFollower(collision.gameObject);
     }
 }

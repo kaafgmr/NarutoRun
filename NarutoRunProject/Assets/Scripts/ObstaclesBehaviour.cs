@@ -4,13 +4,13 @@ public class ObstaclesBehaviour : MonoBehaviour
 {
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.TryGetComponent<FollowerBehaviour>(out FollowerBehaviour FB))
+        if (collision.gameObject.TryGetComponent(out FollowerBehaviour FB))
         {
-            if(FB.Picked)
+            if(FB.picked)
             HitFollower(FB.gameObject);
         }
         
-        if (collision.gameObject.TryGetComponent<PlayerController>(out PlayerController PC))
+        if (collision.gameObject.TryGetComponent(out PlayerController _))
         {
             HitPlayer();
         }
@@ -27,7 +27,7 @@ public class ObstaclesBehaviour : MonoBehaviour
 
     public void HitFollower(GameObject Follower)
     {
-        FollowerCounter.Instance.subtractFollowers(1, Follower);
+        FollowerCounter.instance.SubtractFollower(Follower);
         DisappearEffect.Instance.Disappear(Follower.transform);
         if (AudioManager.instance != null)
             AudioManager.instance.PlaySound("KunaiHit");

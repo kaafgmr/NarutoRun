@@ -34,7 +34,7 @@ public class GodModeKeys : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.N))
         {
            RangeSpawner.instance.RemoveFollower(RangeSpawner.SpawnedObjects[Random.Range(0, RangeSpawner.SpawnedObjects.Count)]);
-           FollowerCounter.Instance.subtractFollowers(1, FollowerCounter.followerList[Random.Range(0, FollowerCounter.followerList.Count)]);
+           FollowerCounter.instance.SubtractFollower(FollowerCounter.followerList[Random.Range(0, FollowerCounter.followerList.Count)]);
         }
 
         //Toggle between been invulnerable or not

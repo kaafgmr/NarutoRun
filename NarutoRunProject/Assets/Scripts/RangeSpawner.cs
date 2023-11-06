@@ -34,7 +34,7 @@ public class RangeSpawner : MonoBehaviour
                 if(Object.TryGetComponent<FollowerBehaviour>(out FollowerBehaviour FB))
                 {
                     FB.ObjectMode();
-                    FB.Picked = false;
+                    FB.picked = false;
                 }
                 SpawnedObjects.Add(Object);
             }
@@ -62,7 +62,7 @@ public class RangeSpawner : MonoBehaviour
     {
         for(int i = 0; i < SpawnedObjects.Count; i++)
         {
-            if (SpawnedObjects[i].GetComponent<FollowerBehaviour>().Picked == false)
+            if (SpawnedObjects[i].GetComponent<FollowerBehaviour>().picked == false)
             {
                 SpawnedObjects[i].SetActive(false);
                 SpawnedObjects.Remove(SpawnedObjects[i]);

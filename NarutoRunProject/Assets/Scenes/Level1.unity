@@ -201,7 +201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eee7aa7eec34124d81757a6a4f906db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
 --- !u!65 &27676115
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1187,7 +1186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a330b5d88b0144449b9b90b13940948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Followers:
+  UpdateFollowers:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 656764838}
@@ -3971,9 +3970,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ef8a29e43058b4c827c5be8f0d49f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 20
-  Center: {fileID: 1751211094}
-  AttackLimit: {fileID: 27676113}
+  joint: {fileID: 813871332}
+  speed: 20
+  mapCenter: {fileID: 1751211094}
+  attackLimit: {fileID: 27676113}
+  minDistToCenter: 0.2
 --- !u!114 &3432870696122329611
 MonoBehaviour:
   m_ObjectHideFlags: 0

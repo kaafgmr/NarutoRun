@@ -12,7 +12,7 @@ public class DisappearEffect : MonoBehaviour
     public void Disappear(Transform Pos)
     {
         GameObject DisappearFX = PoolingManager.Instance.GetPooledObject("DisappearFX");
-        if (DisappearFX != null && Pos != null)
+        if (DisappearFX != null)
         {
             DisappearFX.transform.position = Pos.position;
             DisappearFX.SetActive(true);

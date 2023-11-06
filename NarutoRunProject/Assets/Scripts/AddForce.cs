@@ -10,6 +10,6 @@ public class AddForce : MonoBehaviour
 
     void Update()
     {
-        RB.AddForce(new Vector3(0, 0, -15));
+        RB.AddForce(Vector3.back * -15);
     }
 }

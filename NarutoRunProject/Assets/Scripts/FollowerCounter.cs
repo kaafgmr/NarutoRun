@@ -4,49 +4,41 @@ using UnityEngine.Events;
 
 public class FollowerCounter : MonoBehaviour
 {
-    public static FollowerCounter Instance;
+    public static FollowerCounter instance;
     public static List<GameObject> followerList;
-    public UnityEvent<string> Followers;
-    private int CurrentFollowers;
+    public UnityEvent<string> UpdateFollowers;
 
     private void Awake()
     {
-        Instance = this;
-        CurrentFollowers = 0;
+        instance = this;
         followerList = new List<GameObject>();
     }
 
-    public void init(int amount)
+    private void UpdateFollowersText()
     {
-        CurrentFollowers = amount;
-        Followers.Invoke(CurrentFollowers + "/" + LevelManager.instance.minimunFollowers);
+        UpdateFollowers.Invoke(followerList.Count + "/" + LevelManager.instance.minimunFollowers);
     }
 
-    public void addFollowers(int amount,GameObject Follower)
+    public void Init()
     {
-        if(Follower != null)
-        {
-            CurrentFollowers += amount;
-            Followers.Invoke(CurrentFollowers + "/" + LevelManager.instance.minimunFollowers);
-            followerList.Add(Follower);
-        }
+        UpdateFollowersText();
     }
 
-    public void subtractFollowers(int amount, GameObject Follower)
+    public void AddFollower(GameObject Follower)
     {
-        if(Follower != null)
-        {
-            CurrentFollowers -= amount;
+        if(Follower == null) return;
+        
+        followerList.Add(Follower);
+        UpdateFollowersText();
+    }
 
-            if(CurrentFollowers < 0)
-            {
-                CurrentFollowers = 0;
-            }
-
-            Followers.Invoke(CurrentFollowers + "/" + LevelManager.instance.minimunFollowers);
-            Follower.SetActive(false);
-            followerList.Remove(Follower);
-        }
+    public void SubtractFollower(GameObject Follower)
+    {
+        if (Follower == null) return;
+        
+        followerList.Remove(Follower);
+        Follower.SetActive(false);
+        UpdateFollowersText();
     }
 
     public void DisableAllFollowers()
@@ -61,6 +53,6 @@ public class FollowerCounter : MonoBehaviour
 
     public int GetCurrentFollowers()
     {
-        return CurrentFollowers;
+        return followerList.Count;
     }
 }

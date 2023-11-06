@@ -53,7 +53,6 @@ public class LevelManager : MonoBehaviour
         }
         RangeSpawner.instance.StartSpawning();
         SpawnerBehaviour.instance.Init();
-        FollowerCounter.Instance.init(0);
         CanvasTextChanger.instance.Showtext();
         CameraPositions.instance.ChangePositionTo("Playing");
         if(winUIAnim != null)
@@ -122,7 +121,7 @@ public class LevelManager : MonoBehaviour
         }
         RangeSpawner.instance.StopSpawning();
         RangeSpawner.instance.RemoveNotPickedFollowers();
-        FollowerCounter.Instance.DisableAllFollowers();
+        FollowerCounter.instance.DisableAllFollowers();
         CameraPositions.instance.ChangePositionTo("Finish");
         if (PointsSpawner.Instace != null)
         {
@@ -136,7 +135,7 @@ public class LevelManager : MonoBehaviour
         Player.transform.position = PlayerFinalPos.position;
         Player.transform.rotation = Quaternion.Euler(0, 180, 0);
         PlayerAnim.SetInteger("Run", 0);
-        if (FollowerCounter.Instance.GetCurrentFollowers() >= minimunFollowers)
+        if (FollowerCounter.instance.GetCurrentFollowers() >= minimunFollowers)
         {
             Win();
         }

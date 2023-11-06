@@ -2,51 +2,53 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float Speed;
-    public Transform Center;
-    public Rigidbody AttackLimit;
-    private float Distance;
-    private Vector3 Direction;
+    public Transform joint;
+    [SerializeField]private float speed;
+    [SerializeField]private Transform mapCenter;
+    [SerializeField]private Rigidbody attackLimit;
+    [SerializeField]private float minDistToCenter = 0.2f;
+
+    private Vector3 direction;
     private MovementBehaviour MB;
-    private bool CanMove;
+    private bool canMove;
 
     private void Start()
     {
         MB = GetComponent<MovementBehaviour>();
-        MB.Init(Speed);
-        CanMove = true;
+        MB.Init(speed);
+        canMove = true;
     }
 
     private void Update()
     {
-        if (CanMove)
-        {
-            Direction = new Vector3(Input.GetAxisRaw("Horizontal"), 0, 0);
-        }
+        direction = canMove ? Vector3.right * Input.GetAxisRaw("Horizontal") : Vector3.zero;
         
-        Center.position = new Vector3(transform.position.x, transform.position.y, Center.position.z);
-        Distance = Mathf.Abs(transform.position.z - Center.position.z);
+        float Distance = Vector3.Distance(transform.position, mapCenter.position);
 
-        if (Distance > 0.2f)
+        if (Distance > minDistToCenter && Input.GetAxisRaw("Horizontal") == 0)
         {
-            transform.position = Vector3.Lerp(transform.position, Center.position, Time.deltaTime * 2);
+            transform.position = Vector3.Lerp(transform.position, mapCenter.position, Time.deltaTime * 2);
+        }
+        else if (Distance <= minDistToCenter && Input.GetAxis("Horizontal") == 0)
+        {
+            transform.position = mapCenter.position;
         }
 
         if(Input.GetKeyDown(KeyCode.Space) && FollowerCounter.followerList.Count > 0)
         {
-            FollowerBehaviour AttackerFollower = FollowerCounter.followerList[Random.Range(0, FollowerCounter.followerList.Count)].GetComponent<FollowerBehaviour>();
-            AttackerFollower.AttackMode(AttackLimit);
-            FollowerCounter.followerList.Remove(AttackerFollower.gameObject);
+            FollowerBehaviour objToAttack = FollowerCounter.followerList[Random.Range(0, FollowerCounter.followerList.Count)].GetComponent<FollowerBehaviour>();
+            objToAttack.AttackMode();
+            FollowerCounter.followerList.Remove(objToAttack.gameObject);
         }
     }
 
     private void FixedUpdate()
     {
-        MB.MoveVelocity(Direction * Speed);
+        MB.MoveRB3D(direction);
     }
 
     public void SetCanMove(bool value)
     {
-        CanMove = value;
+        canMove = value;
     }
 }

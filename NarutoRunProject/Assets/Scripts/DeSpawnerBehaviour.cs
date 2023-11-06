@@ -19,12 +19,12 @@ public class DeSpawnerBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<FollowerBehaviour>(out FollowerBehaviour FB) && FB.Picked)
+        if(other.TryGetComponent<FollowerBehaviour>(out FollowerBehaviour FB) && FB.picked)
         {
-            if(FB.Picked)
+            if(FB.picked)
             {
-                FB.Picked = false;
-                FollowerCounter.Instance.subtractFollowers(1, FB.gameObject);
+                FB.picked = false;
+                FollowerCounter.instance.SubtractFollower(FB.gameObject);
             }
         }
 
