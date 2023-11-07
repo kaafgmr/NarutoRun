@@ -135,6 +135,7 @@ public class LevelManager : MonoBehaviour
         Player.transform.position = PlayerFinalPos.position;
         Player.transform.rotation = Quaternion.Euler(0, 180, 0);
         PlayerAnim.SetInteger("Run", 0);
+
         if (FollowerCounter.instance.GetCurrentFollowers() >= minimunFollowers)
         {
             Win();

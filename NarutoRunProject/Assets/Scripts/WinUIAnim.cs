@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WinUIAnim : MonoBehaviour
 {
-    public static WinUIAnim instance;
+    [SerializeField] private float minTargetDist = 0.2f;
     public RectTransform[] objectsToMove;
     public RectTransform[] InitialPoints;
     public RectTransform[] FinalPoints;
     public Image[] ObjectsToAppear;
+    
+    public static WinUIAnim instance;
+    
     private int iterations;
 
     private void Awake()
@@ -26,9 +30,9 @@ public class WinUIAnim : MonoBehaviour
 
         for(int i = 0; i < objectsToMove.Length; i++)
         {
-            if (objectsToMove[i].anchoredPosition != InitialPoints[i].anchoredPosition)
+            if (objectsToMove[i].localPosition != InitialPoints[i].localPosition)
             {
-                StartCoroutine(MoveCounter(InitialPoints[i].anchoredPosition));
+                StartCoroutine(MoveCounter(InitialPoints[i].localPosition));
             }
         }
     }
@@ -43,7 +47,7 @@ public class WinUIAnim : MonoBehaviour
         StartCoroutine(SmoothAppear());
         for(int i = 0; i < FinalPoints.Length; i++)
         {
-            StartCoroutine(MoveCounter(FinalPoints[i].anchoredPosition));
+            StartCoroutine(MoveCounter(FinalPoints[i].localPosition));
         }
     }
 
@@ -74,14 +78,14 @@ public class WinUIAnim : MonoBehaviour
         yield return new WaitForSeconds(Time.deltaTime);
         for(int i = 0; i < objectsToMove.Length; i++)
         {
-            if (Vector2.Distance(objectsToMove[i].anchoredPosition, Target) > 0.5f)
+            if (Vector2.Distance(objectsToMove[i].localPosition, Target) > minTargetDist)
             {
-                objectsToMove[i].anchoredPosition = Vector2.Lerp(objectsToMove[i].anchoredPosition, Target, Time.deltaTime * 5);
+                objectsToMove[i].localPosition = Vector2.Lerp(objectsToMove[i].localPosition, Target, Time.deltaTime * 5);
                 StartCoroutine(MoveCounter(Target));
             }
             else
             {
-                objectsToMove[i].anchoredPosition = Target;
+                objectsToMove[i].localPosition = Target;
                 StopCoroutine(MoveCounter(Target));
             }
         }

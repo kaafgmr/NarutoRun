@@ -50,7 +50,7 @@ public class AudioManager : MonoBehaviour
 		{
 			if (instance != this)
 			{
-				Destroy(this.gameObject);
+				Destroy(gameObject);
 			}
 		}
 		else

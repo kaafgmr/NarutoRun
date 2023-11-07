@@ -10,8 +10,20 @@ public class FollowerCounter : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            if(instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        
         followerList = new List<GameObject>();
+        Init();
     }
 
     private void UpdateFollowersText()
@@ -47,8 +59,6 @@ public class FollowerCounter : MonoBehaviour
         {
             followerList[i].SetActive(false);
         }
-        followerList.Clear();
-        followerList.TrimExcess();
     }
 
     public int GetCurrentFollowers()
