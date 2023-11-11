@@ -24,20 +24,20 @@ public class RangeSpawner : MonoBehaviour
     {
         for(int i = 0; i < BurstAmount; i++)
         {
+            Vector3 distanceVector = secondPoint.position - firstPoint.position;
+            
             int randomObject = Random.Range(0, ObjectsToSpawn.Length);
             GameObject Object = PoolingManager.Instance.GetPooledObject(ObjectsToSpawn[randomObject]);
-            if (Object != null)
+
+            Object.transform.position = firstPoint.position + Random.value * distanceVector;
+
+            if(Object.TryGetComponent(out FollowerBehaviour FB))
             {
-                Vector3 distanceVector = secondPoint.position - firstPoint.position;
-                Object.transform.position = firstPoint.position + Random.value * distanceVector;
-                Object.SetActive(true);
-                if(Object.TryGetComponent<FollowerBehaviour>(out FollowerBehaviour FB))
-                {
-                    FB.ObjectMode();
-                    FB.picked = false;
-                }
-                SpawnedObjects.Add(Object);
+                FB.ObjectMode();
+                FB.picked = false;
             }
+
+            SpawnedObjects.Add(Object);
         }
     }
 
@@ -62,7 +62,7 @@ public class RangeSpawner : MonoBehaviour
     {
         for(int i = 0; i < SpawnedObjects.Count; i++)
         {
-            if (SpawnedObjects[i].GetComponent<FollowerBehaviour>().picked == false)
+            if (!SpawnedObjects[i].GetComponent<FollowerBehaviour>().picked)
             {
                 SpawnedObjects[i].SetActive(false);
                 SpawnedObjects.Remove(SpawnedObjects[i]);

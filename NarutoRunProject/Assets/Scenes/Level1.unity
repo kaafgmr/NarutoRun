@@ -946,7 +946,7 @@ MonoBehaviour:
   LevelSong: Level1Song
   minimunFollowers: 4
   WhenToSpawnFinalFloor: 2
-  Player: {fileID: 3432870696122329608}
+  Player: {fileID: 3432870696122329610}
   PlayerFinalPos: {fileID: 1751211094}
   winUIAnim: {fileID: 1961754625}
   loseUIAnim: {fileID: 1235016987}
@@ -1201,10 +1201,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1573face5dd0984583e2466ae771bb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AmountToPreload: 20
-  FinalFloorName: FinalFloor
-  WhereToSpawnFirst: {fileID: 1525530080}
-  ObjectsToSpawn:
+  amountToPreload: 3
+  finalFloorName: FinalFloor
+  whereToSpawnFirst: {fileID: 1525530080}
+  objectsToSpawn:
   - ArcFloor
   - NormalFloor
 --- !u!4 &833019691
@@ -2095,7 +2095,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1525530079}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -26.49}
+  m_LocalPosition: {x: 0, y: 0, z: -26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2704,7 +2704,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879960562}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -89.1}
+  m_LocalPosition: {x: 0, y: 0, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

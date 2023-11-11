@@ -101,4 +101,10 @@ public class AudioManager : MonoBehaviour
 			sounds[i].Stop();
 		}
 	}
+
+	public void PlayMusic(string name)
+	{
+        StopAllSounds();
+        PlaySound(name);
+    }
 }

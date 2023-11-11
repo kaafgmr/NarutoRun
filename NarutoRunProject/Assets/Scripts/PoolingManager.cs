@@ -45,16 +45,24 @@ public class PoolingManager : MonoBehaviour
     }
 
     public GameObject GetPooledObject(string name)
-    {//Search for an object by its name and returns it
-        List<GameObject> tmp = _items[name];
-        for (int i = 0; i < tmp.Count; i++)
+    {
+        List<GameObject> objs = _items[name];
+
+        for (int i = 0; i < objs.Count; i++)
         {
-            if (!tmp[i].activeInHierarchy)
+            if (!objs[i].activeInHierarchy)
             {
-                return tmp[i];
+                objs[i].SetActive(true);
+                return objs[i];
             }
         }
-        return null;
+
+        GameObject newInstance = Instantiate(objs[0].gameObject);
+        newInstance.SetActive(true);
+        objs.Add(newInstance);
+        TotalObjects.Add(newInstance);
+
+        return newInstance;
     }
 
     public void DisableAllObjects()

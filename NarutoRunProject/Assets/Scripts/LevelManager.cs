@@ -5,11 +5,10 @@ public class LevelManager : MonoBehaviour
     public string LevelSong;
     public int minimunFollowers;
     public float WhenToSpawnFinalFloor;
-    public GameObject Player;
+    public PlayerController Player;
     public Transform PlayerFinalPos;
     public WinUIAnim winUIAnim;
     public WinUIAnim loseUIAnim;
-    private Animator PlayerAnim;
     
     
     public static LevelManager instance;
@@ -17,44 +16,55 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        PlayerAnim = Player.GetComponent<Animator>();
+    }
+
+    public void StartSpawningFloors()
+    {
+        if (SingleTimedSpawner.Instance != null)
+        {
+            SingleTimedSpawner.Instance.StartSpawning();
+        }
+
+        if (PointsSpawner.Instace != null)
+        {
+            PointsSpawner.Instace.StartSpawning();
+        }
+
+        RangeSpawner.instance.StartSpawning();
     }
 
     public void StopSpawningFloors()
     {
-        DeSpawnerBehaviour.Instance.SetCanSpawnFloor(false);
+        if (SingleTimedSpawner.Instance != null)
+        {
+            SingleTimedSpawner.Instance.StopSpawning();
+        }
+        if (PointsSpawner.Instace != null)
+        {
+            PointsSpawner.Instace.StopSpawning();
+        }
+        RangeSpawner.instance.StopSpawning();
     }
 
-    public void DisableFinalFloor()
+    public void StopSpawningNextFloors()
     {
-        if (SpawnerBehaviour.instance.GetFinalFloor() != null)
-        {
-            SpawnerBehaviour.instance.GetFinalFloor().GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
-            SpawnerBehaviour.instance.GetFinalFloor().transform.position = Vector3.zero;
-            SpawnerBehaviour.instance.GetFinalFloor().SetActive(false);
-        }
+        DeSpawnerBehaviour.Instance.SetCanSpawnFloor(false);
     }
 
     public void InitializeLevel()
     {
-        DisableFinalFloor();
+        SpawnerBehaviour.instance.ResetFinalFloor();
         if(AudioManager.instance != null)
         {
-            AudioManager.instance.StopAllSounds();
-            AudioManager.instance.PlaySound(LevelSong);
+            AudioManager.instance.PlayMusic(LevelSong);
         }
-        if(SingleTimedSpawner.Instance != null)
-        {
-            SingleTimedSpawner.Instance.StartSpawning();
-        }
-        if(PointsSpawner.Instace != null)
-        {
-            PointsSpawner.Instace.StartSpawning();
-        }
-        RangeSpawner.instance.StartSpawning();
+
+        StartSpawningFloors();
         SpawnerBehaviour.instance.Init();
+
         CanvasTextChanger.instance.Showtext();
         CameraPositions.instance.ChangePositionTo("Playing");
+
         if(winUIAnim != null)
         {
             winUIAnim.Hide();
@@ -63,78 +73,45 @@ public class LevelManager : MonoBehaviour
         {
             loseUIAnim.Hide();
         }
-        Player.transform.position = Vector3.zero;
-        Player.transform.rotation = Quaternion.Euler(0, 0, 0);
-        PlayerAnim.SetInteger("Run", 1);
-        PlayerAnim.SetBool("Victory", false);
-        PlayerAnim.SetBool("Lose", false);
-        Player.GetComponent<PlayerController>().SetCanMove(true);
-        for (int i = 0; i < SpawnerBehaviour.SpawnedFloors.Count; i++)
-        {
-            SpawnerBehaviour.SpawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
-        }
     }
 
     public void Freeze()
     {
-        if (SingleTimedSpawner.Instance != null)
-        {
-            SingleTimedSpawner.Instance.StopSpawning();
-        }
-        if (PointsSpawner.Instace != null)
-        {
-            PointsSpawner.Instace.StopSpawning();
-        }
+        StopSpawningFloors();
         DeSpawnerBehaviour.Instance.SetCanSpawnFloor(false);
-        RangeSpawner.instance.StopSpawning();
-        for (int i = 0; i < SpawnerBehaviour.SpawnedFloors.Count; i++)
+        for (int i = 0; i < SpawnerBehaviour.spawnedFloors.Count; i++)
         {
-            SpawnerBehaviour.SpawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(false);
+            SpawnerBehaviour.spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(false);
         }
-        PlayerAnim.SetInteger("Run", 0);
+        Player.Idle();
     }
 
     public void Unfreeze()
     {
-        if (SingleTimedSpawner.Instance != null)
-        {
-            SingleTimedSpawner.Instance.StartSpawning();
-        }
-        if (PointsSpawner.Instace != null)
-        {
-            PointsSpawner.Instace.StartSpawning();
-        }
+        StartSpawningFloors();
         DeSpawnerBehaviour.Instance.SetCanSpawnFloor(true);
-        RangeSpawner.instance.StartSpawning();
-        for (int i = 0; i < SpawnerBehaviour.SpawnedFloors.Count; i++)
+        for (int i = 0; i < SpawnerBehaviour.spawnedFloors.Count; i++)
         {
-            SpawnerBehaviour.SpawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
+            SpawnerBehaviour.spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
         }
-        PlayerAnim.SetInteger("Run", 1);
+        Player.StartRunning();
     }
 
     public void Finished()
     {
-        if (SingleTimedSpawner.Instance != null)
+        StopSpawningFloors();
+
+        for (int i = 0; i < SpawnerBehaviour.spawnedFloors.Count; i++)
         {
-            SingleTimedSpawner.Instance.StopSpawning();
+            SpawnerBehaviour.spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(false);
         }
-        RangeSpawner.instance.StopSpawning();
-        RangeSpawner.instance.RemoveNotPickedFollowers();
+
         FollowerCounter.instance.DisableAllFollowers();
+        RangeSpawner.instance.RemoveNotPickedFollowers();
         CameraPositions.instance.ChangePositionTo("Finish");
-        if (PointsSpawner.Instace != null)
-        {
-            PointsSpawner.Instace.StopSpawning();
-        }
-        for (int i = 0; i < SpawnerBehaviour.SpawnedFloors.Count; i++)
-        {
-            SpawnerBehaviour.SpawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(false);
-        }
-        Player.GetComponent<PlayerController>().SetCanMove(false);
-        Player.transform.position = PlayerFinalPos.position;
-        Player.transform.rotation = Quaternion.Euler(0, 180, 0);
-        PlayerAnim.SetInteger("Run", 0);
+
+        Player.SetCanMove(false);
+        Player.transform.SetPositionAndRotation(PlayerFinalPos.position, Quaternion.Euler(0, 180, 0));
 
         if (FollowerCounter.instance.GetCurrentFollowers() >= minimunFollowers)
         {
@@ -148,13 +125,13 @@ public class LevelManager : MonoBehaviour
 
     public void Win()
     {
-        PlayerAnim.SetBool("Victory", true);
+        Player.Win();
         winUIAnim.StartAnimation();
     }
 
     public void Lose()
     {
-        PlayerAnim.SetBool("Lose", true);
+        Player.Lose();
         loseUIAnim.StartAnimation();
     }
 }

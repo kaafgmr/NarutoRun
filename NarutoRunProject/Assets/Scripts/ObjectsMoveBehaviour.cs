@@ -16,14 +16,9 @@ public class ObjectsMoveBehaviour : MonoBehaviour
 
     void Update()
     {
-        if(canMove)
-        {
-            MB.MoveRB3D(Vector3.back);
-        }
-        else
-        {
-            MB.MoveVelocity(Vector3.zero);
-        }
+        int canMoveint = canMove ? 1 : 0;
+
+        MB.MoveVelocity(Vector3.back * canMoveint);
     }
 
     public void SetCanMove(bool value)

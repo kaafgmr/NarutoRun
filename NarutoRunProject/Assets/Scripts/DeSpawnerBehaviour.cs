@@ -12,29 +12,32 @@ public class DeSpawnerBehaviour : MonoBehaviour
         CanSpawnFloor = true;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.TryGetComponent(out FollowerBehaviour FB))
+        {
+             FB.TryDeSpawn();
+        }
+        else if(CanSpawnFloor && other.TryGetComponent(out ObjectsMoveBehaviour _))
+        {
+            SpawnerBehaviour.instance.SpawnNextFloor(other.gameObject);
+        }
+
+        other.gameObject.SetActive(false);
+    }
+
     public void SetCanSpawnFloor(bool value)
     {
         CanSpawnFloor = value;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void StartSpawningFloors()
     {
-        if(other.TryGetComponent<FollowerBehaviour>(out FollowerBehaviour FB) && FB.picked)
-        {
-            if(FB.picked)
-            {
-                FB.picked = false;
-                FollowerCounter.instance.SubtractFollower(FB.gameObject);
-            }
-        }
+        SetCanSpawnFloor(true);
+    }
 
-        
-        if(CanSpawnFloor && other.TryGetComponent<ObjectsMoveBehaviour>(out ObjectsMoveBehaviour OMB))
-        {
-            SpawnerBehaviour.instance.SpawnRandomFloor();
-            SpawnerBehaviour.SpawnedFloors.Remove(other.gameObject);
-        }
-
-        other.gameObject.SetActive(false);
+    public void StopSpawningFloors()
+    {
+        SetCanSpawnFloor(false);
     }
 }

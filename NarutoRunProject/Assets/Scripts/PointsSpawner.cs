@@ -21,13 +21,10 @@ public class PointsSpawner : MonoBehaviour
     {
         int randomObject = Random.Range(0, ObjectsToSpawn.Length);
         GameObject Object = PoolingManager.Instance.GetPooledObject(ObjectsToSpawn[randomObject].ToString());
-        if (Object != null)
-        {
-            int randomPosition = Random.Range(0, PointsList.Length);
-            Object.transform.position = PointsList[randomPosition].position;
-            Object.SetActive(true);
-            Spawned.Invoke();
-        }
+
+        int randomPosition = Random.Range(0, PointsList.Length);
+        Object.transform.position = PointsList[randomPosition].position;
+        Spawned.Invoke();
     }
 
 
@@ -37,13 +34,10 @@ public class PointsSpawner : MonoBehaviour
         {
             int randomObject = Random.Range(0, ObjectsToSpawn.Length);
             GameObject Object = PoolingManager.Instance.GetPooledObject(ObjectsToSpawn[randomObject].ToString());
-            if (Object != null)
-            {
-                Object.transform.position = PointsList[i].position;
-                Object.SetActive(true);
-                Object.GetComponent<HealthBehaviour>().Reset();
-                Spawned.Invoke();
-            }
+
+            Object.transform.position = PointsList[i].position;
+            Object.GetComponent<HealthBehaviour>().Reset();
+            Spawned.Invoke();
         }
     }
 

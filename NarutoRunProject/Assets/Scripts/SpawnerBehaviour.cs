@@ -4,29 +4,31 @@ using UnityEngine;
 
 public class SpawnerBehaviour : MonoBehaviour
 {
-    public int AmountToPreload;
-    public string FinalFloorName;
-    public Transform WhereToSpawnFirst;
-    public string[] ObjectsToSpawn;
-    private Transform EndPoint;
-    private float TimeToSpawnFinalfloor;
-    private GameObject FinalFloor;
+    [SerializeField] private int amountToPreload;
+    [SerializeField] private string finalFloorName;
+    [SerializeField] private Transform whereToSpawnFirst;
+    [SerializeField] private string[] objectsToSpawn;
 
-    public static List<GameObject> SpawnedFloors;
+    private Transform endPoint;
+    private float timeToSpawnFinalfloor;
+    private GameObject finalFloor;
+
+    public static List<GameObject> spawnedFloors;
     public static SpawnerBehaviour instance;
 
     private void Start()
     {
         instance = this;
-        SpawnedFloors = new List<GameObject>();
+        spawnedFloors = new List<GameObject>();
     }
 
     public void Init()
     {
-        EndPoint = WhereToSpawnFirst;
-        TimeToSpawnFinalfloor = LevelManager.instance.WhenToSpawnFinalFloor;
+        endPoint = whereToSpawnFirst;
+        timeToSpawnFinalfloor = LevelManager.instance.WhenToSpawnFinalFloor;
         StopAllCoroutines();
-        for (int i = 0; i < AmountToPreload; i++)
+        RemoveAllFloors();
+        for (int i = 0; i < amountToPreload; i++)
         {
             SpawnRandomFloor();
         }
@@ -35,76 +37,98 @@ public class SpawnerBehaviour : MonoBehaviour
 
     public void SpawnRandomFloor()
     {
-        int RandomFloor = Random.Range(0, ObjectsToSpawn.Length);
-        GameObject Floor = PoolingManager.Instance.GetPooledObject(ObjectsToSpawn[RandomFloor]);
-        if (Floor != null)
+        int RandomFloor = Random.Range(0, objectsToSpawn.Length);
+        GameObject Floor = PoolingManager.Instance.GetPooledObject(objectsToSpawn[RandomFloor]);
+        Floor.GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
+
+        Transform FloorStart = Floor.GetComponent<FloorBehaviour>().floorStart;
+        Transform FloorEnd = Floor.GetComponent<FloorBehaviour>().floorEnd;
+        float ObjectWidth = Vector3.Distance(Floor.transform.position, FloorStart.position);
+
+        Floor.transform.position = endPoint.position;
+        Floor.transform.position += Vector3.forward * ObjectWidth;
+        endPoint = FloorEnd;
+
+        LargeTrashBehaviour LTB = Floor.GetComponentInChildren<LargeTrashBehaviour>();
+        SmallTrashBehaviour STB = Floor.GetComponentInChildren<SmallTrashBehaviour>();
+
+        if(LTB != null)
         {
-            Transform FloorStart = Floor.transform.GetChild(0).transform;
-            Transform FloorEnd = Floor.transform.GetChild(1).transform;
+            LTB.StopMoving();
+            LTB.ResetPos();
+        }
+        else if (STB != null)
+        {
+            STB.StopMoving();
+            STB.ResetPos();
+        }
 
-            float ObjectWidth = Vector3.Distance(Floor.transform.position, FloorStart.position);
-            FloorStart.position = EndPoint.position;
-            Floor.transform.position = new Vector3(Floor.transform.position.x, Floor.transform.position.y, FloorStart.position.z + ObjectWidth);
-            FloorStart.position = EndPoint.position;
-            EndPoint = FloorEnd;
+        spawnedFloors.Add(Floor);
+    }
 
-            LargeTrashBehaviour LTB = Floor.GetComponentInChildren<LargeTrashBehaviour>();
-            SmallTrashBehaviour STB = Floor.GetComponentInChildren<SmallTrashBehaviour>();
+    public void SpawnNextFloor(GameObject oldFloor)
+    {
+        SpawnRandomFloor();
+        spawnedFloors.Remove(oldFloor);
+    }
 
-            if(LTB != null)
-            {
-                LTB.StopMoving();
-                LTB.ResetPos();
-            }
-            else if (STB != null)
-            {
-                STB.StopMoving();
-                STB.ResetPos();
-            }
+    public void RemoveAllFloors()
+    {
+        if (spawnedFloors.Count <= 0) return;
+        
+        foreach (GameObject floor in spawnedFloors)
+        {
+            floor.SetActive(false);
+        }
+    }
 
-            Floor.SetActive(true);
-            SpawnedFloors.Add(Floor);
+    public void ResetFinalFloor()
+    {
+        GameObject finalFloor = GetFinalFloor();
+        if (finalFloor != null)
+        {
+            finalFloor.GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
+            finalFloor.transform.position = Vector3.zero;
+            finalFloor.SetActive(false);
         }
     }
 
     public void SpawnFinalFloor()
     {
-        GameObject Floor = PoolingManager.Instance.GetPooledObject(FinalFloorName);
-        if (Floor != null)
-        {
-            Transform FloorStart = Floor.transform.GetChild(0).transform;
-            Transform FloorEnd = Floor.transform.GetChild(1).transform;
+        GameObject Floor = PoolingManager.Instance.GetPooledObject(finalFloorName);
 
-            float ObjectWidth = Vector3.Distance(Floor.transform.position, FloorStart.position);
-            FloorStart.position = EndPoint.position;
-            Floor.transform.position = new Vector3(Floor.transform.position.x, Floor.transform.position.y, FloorStart.position.z + ObjectWidth);
-            FloorStart.position = EndPoint.position;
-            EndPoint = FloorEnd;
+        Transform FloorStart = Floor.transform.GetChild(0).transform;
+        Transform FloorEnd = Floor.transform.GetChild(1).transform;
 
-            Floor.SetActive(true);
-            FinalFloor = Floor;
-            SpawnedFloors.Add(Floor);
-        }
+        float ObjectWidth = Vector3.Distance(Floor.transform.position, FloorStart.position);
+        FloorStart.position = endPoint.position;
+        Floor.transform.position = new Vector3(Floor.transform.position.x, Floor.transform.position.y, FloorStart.position.z + ObjectWidth);
+        FloorStart.position = endPoint.position;
+        endPoint = FloorEnd;
+
+        Floor.SetActive(true);
+        finalFloor = Floor;
+        spawnedFloors.Add(Floor);
     }
 
     IEnumerator FinalFloorTimer()
     {
         yield return new WaitForSeconds(Time.deltaTime);
-        if(TimeToSpawnFinalfloor > 0)
+        if(timeToSpawnFinalfloor > 0)
         {
-            TimeToSpawnFinalfloor -= Time.deltaTime;
+            timeToSpawnFinalfloor -= Time.deltaTime;
             StartCoroutine(FinalFloorTimer());
         }
         else
         {
             SpawnFinalFloor();
-            LevelManager.instance.StopSpawningFloors();
+            LevelManager.instance.StopSpawningNextFloors();
             StopAllCoroutines();
         }
     }
 
     public GameObject GetFinalFloor()
     {
-        return FinalFloor;
+        return finalFloor;
     }
 }

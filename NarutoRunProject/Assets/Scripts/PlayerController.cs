@@ -11,9 +11,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
     private MovementBehaviour MB;
     private bool canMove;
+    private Animator animator;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         MB = GetComponent<MovementBehaviour>();
         MB.Init(speed);
         canMove = true;
@@ -50,5 +52,40 @@ public class PlayerController : MonoBehaviour
     public void SetCanMove(bool value)
     {
         canMove = value;
+    }
+
+    public void InitPlayerToPlay()
+    {
+        transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
+        StartRunning();
+
+        SetCanMove(true);
+    }
+
+    public void StartRunning()
+    {
+        animator.SetInteger("Run", 1);
+        animator.SetBool("Victory", false);
+        animator.SetBool("Lose", false);
+    }
+    public void Idle()
+    {
+        animator.SetInteger("Run", 0);
+        animator.SetBool("Victory", false);
+        animator.SetBool("Lose", false);
+    }
+
+    public void Win()
+    {
+        animator.SetInteger("Run", 0);
+        animator.SetBool("Victory", true);
+        animator.SetBool("Lose", false);
+    }
+
+    public void Lose()
+    {
+        animator.SetInteger("Run", 0);
+        animator.SetBool("Victory", false);
+        animator.SetBool("Lose", true);
     }
 }

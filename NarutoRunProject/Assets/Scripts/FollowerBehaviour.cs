@@ -83,4 +83,11 @@ public class FollowerBehaviour : MonoBehaviour
     {
         return attacking;
     }
+
+    public void TryDeSpawn()
+    {
+        if (picked) return;
+        picked = false;
+        FollowerCounter.instance.SubtractFollower(gameObject);
+    }
 }

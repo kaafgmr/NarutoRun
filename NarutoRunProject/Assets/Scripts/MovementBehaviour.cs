@@ -124,12 +124,12 @@ public class MovementBehaviour : MonoBehaviour
         direction = newDir;
     }
 
-    public float getVelocity()
+    public float GetVelocity()
     {
         return velocity;
     }
 
-    public Vector3 getDirection()
+    public Vector3 GetDirection()
     {
         return direction;
     }

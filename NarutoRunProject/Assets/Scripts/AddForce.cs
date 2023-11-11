@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class AddForce : MonoBehaviour
 {
+    [SerializeField] private float force = -15f;
     private Rigidbody RB;
     private void Start()
     {
@@ -10,6 +11,6 @@ public class AddForce : MonoBehaviour
 
     void Update()
     {
-        RB.AddForce(Vector3.back * -15);
+        RB.AddForce(Vector3.back * force);
     }
 }
