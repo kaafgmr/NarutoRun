@@ -131,4 +131,19 @@ public class SpawnerBehaviour : MonoBehaviour
     {
         return finalFloor;
     }
+
+    public void FreezeAllFloors()
+    {
+        for (int i = 0; i < spawnedFloors.Count; i++)
+        {
+            spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(false);
+        }
+    }
+    public void UnFreezeAllFloors()
+    {
+        for (int i = 0; i < spawnedFloors.Count; i++)
+        {
+            spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
+        }
+    }
 }

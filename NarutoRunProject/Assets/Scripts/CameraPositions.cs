@@ -12,21 +12,25 @@ public class CameraPosition
 
 public class CameraPositions : MonoBehaviour
 {
-    public float Speed;
-    public Camera cameraToMove;
-    [SerializeField]
-    public List<CameraPosition> positionList;
-    [SerializeField]
+    [SerializeField] private float speed;
+    [SerializeField] private float minPosDistance;
+    [SerializeField] private float minRotDistance;
+    [SerializeField] private Camera cameraToMove;
+    [SerializeField] private List<CameraPosition> positionList;
+
     private Dictionary<string,Transform> positionDictionary;
+
     public static CameraPositions instance;
 
     private void Start()
     {
-        positionDictionary = new Dictionary<string, Transform>();
         instance = this;
-        for(int i = 0; i < positionList.Count; i++)
+        
+        positionDictionary = new Dictionary<string, Transform>();
+
+        foreach (CameraPosition cam in positionList)
         {
-            positionDictionary[positionList[i].name] = positionList[i].position;
+            positionDictionary[cam.name] = cam.position;
         }
     }
 
@@ -38,14 +42,21 @@ public class CameraPositions : MonoBehaviour
     IEnumerator SmoothTransition(Transform Target)
     {
         yield return new WaitForSeconds(Time.deltaTime);
-        if(cameraToMove.transform.position != Target.position && cameraToMove.transform.rotation != Target.rotation)
+
+        float posDis = Vector3.Distance(cameraToMove.transform.position, Target.transform.position);
+        float rotDis = Vector3.Distance(cameraToMove.transform.rotation.eulerAngles, Target.transform.rotation.eulerAngles);
+
+        if(posDis > minPosDistance && rotDis > minRotDistance)
         {
-            cameraToMove.transform.position = Vector3.Lerp(cameraToMove.transform.position, Target.position, Time.deltaTime * Speed);
-            cameraToMove.transform.rotation = Quaternion.Lerp(cameraToMove.transform.rotation, Target.rotation, Time.deltaTime * Speed);
+            Vector3 newPos = Vector3.Lerp(cameraToMove.transform.position, Target.position, Time.deltaTime * speed);
+            Quaternion newRot = Quaternion.Lerp(cameraToMove.transform.rotation, Target.rotation, Time.deltaTime * speed);
+            cameraToMove.transform.SetPositionAndRotation(newPos, newRot);
+            
             StartCoroutine(SmoothTransition(Target));
         }
         else
         {
+            cameraToMove.transform.SetPositionAndRotation(Target.position, Target.rotation);
             StopAllCoroutines();
         }
     }

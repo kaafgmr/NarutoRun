@@ -58,8 +58,6 @@ public class PlayerController : MonoBehaviour
     {
         transform.SetPositionAndRotation(Vector3.zero, Quaternion.Euler(0, 0, 0));
         StartRunning();
-
-        SetCanMove(true);
     }
 
     public void StartRunning()
@@ -67,12 +65,14 @@ public class PlayerController : MonoBehaviour
         animator.SetInteger("Run", 1);
         animator.SetBool("Victory", false);
         animator.SetBool("Lose", false);
+        SetCanMove(true);
     }
     public void Idle()
     {
         animator.SetInteger("Run", 0);
         animator.SetBool("Victory", false);
         animator.SetBool("Lose", false);
+        SetCanMove(false);
     }
 
     public void Win()
@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
         animator.SetInteger("Run", 0);
         animator.SetBool("Victory", true);
         animator.SetBool("Lose", false);
+        SetCanMove(false);
     }
 
     public void Lose()
@@ -87,5 +88,6 @@ public class PlayerController : MonoBehaviour
         animator.SetInteger("Run", 0);
         animator.SetBool("Victory", false);
         animator.SetBool("Lose", true);
+        SetCanMove(false);
     }
 }

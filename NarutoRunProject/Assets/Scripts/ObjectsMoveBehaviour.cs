@@ -14,7 +14,7 @@ public class ObjectsMoveBehaviour : MonoBehaviour
         canMove = true;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         int canMoveint = canMove ? 1 : 0;
 

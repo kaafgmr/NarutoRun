@@ -46,6 +46,11 @@ public class LevelManager : MonoBehaviour
         RangeSpawner.instance.StopSpawning();
     }
 
+    public void StartSpawningNextFloors()
+    {
+        DeSpawnerBehaviour.Instance.SetCanSpawnFloor(true);
+    }
+
     public void StopSpawningNextFloors()
     {
         DeSpawnerBehaviour.Instance.SetCanSpawnFloor(false);
@@ -54,6 +59,7 @@ public class LevelManager : MonoBehaviour
     public void InitializeLevel()
     {
         SpawnerBehaviour.instance.ResetFinalFloor();
+
         if(AudioManager.instance != null)
         {
             AudioManager.instance.PlayMusic(LevelSong);
@@ -78,22 +84,16 @@ public class LevelManager : MonoBehaviour
     public void Freeze()
     {
         StopSpawningFloors();
-        DeSpawnerBehaviour.Instance.SetCanSpawnFloor(false);
-        for (int i = 0; i < SpawnerBehaviour.spawnedFloors.Count; i++)
-        {
-            SpawnerBehaviour.spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(false);
-        }
+        StopSpawningNextFloors();
+        SpawnerBehaviour.instance.FreezeAllFloors();
         Player.Idle();
     }
 
     public void Unfreeze()
     {
         StartSpawningFloors();
-        DeSpawnerBehaviour.Instance.SetCanSpawnFloor(true);
-        for (int i = 0; i < SpawnerBehaviour.spawnedFloors.Count; i++)
-        {
-            SpawnerBehaviour.spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
-        }
+        StartSpawningNextFloors();
+        SpawnerBehaviour.instance.UnFreezeAllFloors();
         Player.StartRunning();
     }
 
@@ -101,16 +101,11 @@ public class LevelManager : MonoBehaviour
     {
         StopSpawningFloors();
 
-        for (int i = 0; i < SpawnerBehaviour.spawnedFloors.Count; i++)
-        {
-            SpawnerBehaviour.spawnedFloors[i].GetComponent<ObjectsMoveBehaviour>().SetCanMove(false);
-        }
+        SpawnerBehaviour.instance.FreezeAllFloors();
 
-        FollowerCounter.instance.DisableAllFollowers();
-        RangeSpawner.instance.RemoveNotPickedFollowers();
+        RemoveAllFollowers();
         CameraPositions.instance.ChangePositionTo("Finish");
 
-        Player.SetCanMove(false);
         Player.transform.SetPositionAndRotation(PlayerFinalPos.position, Quaternion.Euler(0, 180, 0));
 
         if (FollowerCounter.instance.GetCurrentFollowers() >= minimunFollowers)
@@ -121,6 +116,12 @@ public class LevelManager : MonoBehaviour
         {
             Lose();
         }
+    }
+
+    private void RemoveAllFollowers()
+    {
+        FollowerCounter.instance.DisableAllFollowers();
+        RangeSpawner.instance.RemoveNotPickedFollowers();
     }
 
     public void Win()
