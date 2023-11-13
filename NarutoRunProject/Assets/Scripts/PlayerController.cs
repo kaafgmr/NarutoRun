@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -23,24 +24,31 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        direction = canMove ? Vector3.right * Input.GetAxisRaw("Horizontal") : Vector3.zero;
-        
-        float Distance = Vector3.Distance(transform.position, mapCenter.position);
+        float horizontalAxis = Input.GetAxisRaw("Horizontal");
 
-        if (Distance > minDistToCenter && Input.GetAxisRaw("Horizontal") == 0)
+        direction = canMove ? Vector3.right * horizontalAxis : Vector3.zero;
+      
+        if (horizontalAxis == 0 && canMove)
         {
-            transform.position = Vector3.Lerp(transform.position, mapCenter.position, Time.deltaTime * 2);
-        }
-        else if (Distance <= minDistToCenter && Input.GetAxis("Horizontal") == 0)
-        {
-            transform.position = mapCenter.position;
+            float Distance = Vector3.Distance(transform.position, mapCenter.position);
+
+            if (Distance > minDistToCenter)
+            {
+                transform.position = Vector3.Lerp(transform.position, mapCenter.position, Time.deltaTime * 2);
+            }
+            else
+            {
+                transform.position = mapCenter.position;
+            }
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && FollowerCounter.followerList.Count > 0)
+        List<GameObject> followerList = FollowerCounter.instance.GetFollowerList();
+
+        if (Input.GetKeyDown(KeyCode.Space) && followerList.Count > 0)
         {
-            FollowerBehaviour objToAttack = FollowerCounter.followerList[Random.Range(0, FollowerCounter.followerList.Count)].GetComponent<FollowerBehaviour>();
+            FollowerBehaviour objToAttack = followerList[Random.Range(0, followerList.Count)].GetComponent<FollowerBehaviour>();
             objToAttack.AttackMode();
-            FollowerCounter.followerList.Remove(objToAttack.gameObject);
+            followerList.Remove(objToAttack.gameObject);
         }
     }
 

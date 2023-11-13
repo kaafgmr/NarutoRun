@@ -80,10 +80,7 @@ public class SpawnerBehaviour : MonoBehaviour
         {
             floor.SetActive(false);
         }
-    }
 
-    public void ResetFinalFloor()
-    {
         GameObject finalFloor = GetFinalFloor();
         if (finalFloor != null)
         {

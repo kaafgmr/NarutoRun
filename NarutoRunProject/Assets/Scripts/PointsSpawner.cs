@@ -44,7 +44,7 @@ public class PointsSpawner : MonoBehaviour
 
     IEnumerator SpawnTimer()
     {
-        if(FollowerCounter.followerList.Count > 1)
+        if(FollowerCounter.instance.GetFollowerList().Count > 1)
         {
             if(SpawnInEveryPosition)
             {

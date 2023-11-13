@@ -13,10 +13,13 @@ public class RangeSpawner : MonoBehaviour
     public static RangeSpawner instance;
     public static List<GameObject> SpawnedObjects;
 
+    private bool canSpawn;
+
     private void Start()
     {
         BurstAmount = 1;
         instance = this;
+        canSpawn = true;
         SpawnedObjects = new List<GameObject>();
     }
 
@@ -34,7 +37,6 @@ public class RangeSpawner : MonoBehaviour
             if(Object.TryGetComponent(out FollowerBehaviour FB))
             {
                 FB.ObjectMode();
-                FB.picked = false;
             }
 
             SpawnedObjects.Add(Object);
@@ -43,29 +45,36 @@ public class RangeSpawner : MonoBehaviour
 
     IEnumerator SpawnTimer()
     {
-        Spawn();
         yield return new WaitForSeconds(Random.Range(minimumTimeRange, maximumTimeRange));
-        StartCoroutine(SpawnTimer());
+
+        if(canSpawn)
+        {
+            Spawn();
+            StartCoroutine(SpawnTimer());
+        }
     }
 
     public void StartSpawning()
     {
+        canSpawn = true;
         StartCoroutine(SpawnTimer());
     }
 
     public void StopSpawning()
     {
+        canSpawn = false;
         StopAllCoroutines();
     }
 
     public void RemoveNotPickedFollowers()
     {
-        for(int i = 0; i < SpawnedObjects.Count; i++)
+        for (int i = 0; i < SpawnedObjects.Count; i++)
         {
-            if (!SpawnedObjects[i].GetComponent<FollowerBehaviour>().picked)
+            FollowerBehaviour followerBehaviour = SpawnedObjects[i].GetComponent<FollowerBehaviour>();
+            if (!followerBehaviour.picked)
             {
-                SpawnedObjects[i].SetActive(false);
-                SpawnedObjects.Remove(SpawnedObjects[i]);
+                followerBehaviour.DeSpawn();
+                RemoveFollower(SpawnedObjects[i]);
             }
         }
     }
@@ -82,7 +91,7 @@ public class RangeSpawner : MonoBehaviour
     {
         for(int i = 0; i < SpawnedObjects.Count; i++)
         {
-            SpawnedObjects[i].SetActive(false);
+            SpawnedObjects[i].GetComponent<FollowerBehaviour>().DeSpawn();
         }
         SpawnedObjects.Clear();
         SpawnedObjects.TrimExcess();

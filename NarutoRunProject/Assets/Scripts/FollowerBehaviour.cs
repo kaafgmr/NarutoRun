@@ -49,6 +49,7 @@ public class FollowerBehaviour : MonoBehaviour
     {
         OB.enabled = true;
         AF.enabled = false;
+        picked = false;
         anim.SetBool("ObjectMode", true);
         anim.SetBool("FollowMode", false);
         if(gameObject.TryGetComponent(out SpringJoint SJ))
@@ -84,10 +85,9 @@ public class FollowerBehaviour : MonoBehaviour
         return attacking;
     }
 
-    public void TryDeSpawn()
+    public void DeSpawn()
     {
-        if (picked) return;
+        gameObject.SetActive(false);
         picked = false;
-        FollowerCounter.instance.SubtractFollower(gameObject);
     }
 }

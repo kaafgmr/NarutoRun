@@ -58,17 +58,15 @@ public class LevelManager : MonoBehaviour
 
     public void InitializeLevel()
     {
-        SpawnerBehaviour.instance.ResetFinalFloor();
-
         if(AudioManager.instance != null)
         {
             AudioManager.instance.PlayMusic(LevelSong);
         }
 
-        StartSpawningFloors();
-        SpawnerBehaviour.instance.Init();
+        Player.InitPlayerToPlay();
 
         CanvasTextChanger.instance.Showtext();
+        FollowerCounter.instance.Init();
         CameraPositions.instance.ChangePositionTo("Playing");
 
         if(winUIAnim != null)
@@ -79,6 +77,10 @@ public class LevelManager : MonoBehaviour
         {
             loseUIAnim.Hide();
         }
+
+        SpawnerBehaviour.instance.RemoveAllFloors();
+        StartSpawningFloors();
+        SpawnerBehaviour.instance.Init();
     }
 
     public void Freeze()
@@ -100,22 +102,10 @@ public class LevelManager : MonoBehaviour
     public void Finished()
     {
         StopSpawningFloors();
-
         SpawnerBehaviour.instance.FreezeAllFloors();
-
         RemoveAllFollowers();
         CameraPositions.instance.ChangePositionTo("Finish");
-
         Player.transform.SetPositionAndRotation(PlayerFinalPos.position, Quaternion.Euler(0, 180, 0));
-
-        if (FollowerCounter.instance.GetCurrentFollowers() >= minimunFollowers)
-        {
-            Win();
-        }
-        else
-        {
-            Lose();
-        }
     }
 
     private void RemoveAllFollowers()
@@ -126,12 +116,14 @@ public class LevelManager : MonoBehaviour
 
     public void Win()
     {
+        Finished();
         Player.Win();
         winUIAnim.StartAnimation();
     }
 
     public void Lose()
     {
+        Finished();
         Player.Lose();
         loseUIAnim.StartAnimation();
     }

@@ -13,6 +13,14 @@ public class FinalFloorBehaviour : MonoBehaviour
     {
         OMB.SetCanMove(false);
         LevelManager.instance.PlayerFinalPos = MovePlayer;
-        LevelManager.instance.Finished();
+
+        if (FollowerCounter.instance.GetCurrentFollowers() >= LevelManager.instance.minimunFollowers)
+        {
+            LevelManager.instance.Win();
+        }
+        else
+        {
+            LevelManager.instance.Lose();
+        }
     }
 }

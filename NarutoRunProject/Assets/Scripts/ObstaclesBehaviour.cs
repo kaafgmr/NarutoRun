@@ -22,14 +22,18 @@ public class ObstaclesBehaviour : MonoBehaviour
         {
             AudioManager.instance.PlaySound("PlayerHit");
         }
-            LevelManager.instance.Finished();
+        LevelManager.instance.Lose();
     }
 
     public void HitFollower(GameObject Follower)
     {
-        FollowerCounter.instance.SubtractFollower(Follower);
-        DisappearEffect.Instance.Disappear(Follower.transform);
         if (AudioManager.instance != null)
+        {
             AudioManager.instance.PlaySound("KunaiHit");
+        }
+        DisappearEffect.Instance.Disappear(Follower.transform);
+
+        FollowerCounter.instance.SubtractFollower(Follower);
+        Follower.GetComponent<FollowerBehaviour>().DeSpawn();
     }
 }

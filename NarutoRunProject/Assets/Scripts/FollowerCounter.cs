@@ -5,8 +5,9 @@ using UnityEngine.Events;
 public class FollowerCounter : MonoBehaviour
 {
     public static FollowerCounter instance;
-    public static List<GameObject> followerList;
+
     public UnityEvent<string> UpdateFollowers;
+    private List<GameObject> followerList;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class FollowerCounter : MonoBehaviour
 
     public void Init()
     {
+        DisableAllFollowers();
         UpdateFollowersText();
     }
 
@@ -49,20 +51,24 @@ public class FollowerCounter : MonoBehaviour
         if (Follower == null) return;
         
         followerList.Remove(Follower);
-        Follower.SetActive(false);
         UpdateFollowersText();
     }
 
     public void DisableAllFollowers()
     {
-        for(int i = 0; i < followerList.Count; i++)
+        for (int i = 0; i < followerList.Count; i++)
         {
-            followerList[i].SetActive(false);
+            followerList[i].GetComponent<FollowerBehaviour>().DeSpawn();
         }
     }
 
     public int GetCurrentFollowers()
     {
         return followerList.Count;
+    }
+
+    public List<GameObject> GetFollowerList()
+    {
+        return followerList;
     }
 }

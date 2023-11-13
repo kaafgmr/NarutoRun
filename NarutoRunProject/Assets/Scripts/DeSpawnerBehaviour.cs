@@ -16,7 +16,8 @@ public class DeSpawnerBehaviour : MonoBehaviour
     {
         if(other.TryGetComponent(out FollowerBehaviour FB))
         {
-             FB.TryDeSpawn();
+            FB.DeSpawn();
+            FollowerCounter.instance.SubtractFollower(gameObject);
         }
         else if(CanSpawnFloor && other.TryGetComponent(out ObjectsMoveBehaviour _))
         {

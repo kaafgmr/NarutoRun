@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,8 +34,10 @@ public class GodModeKeys : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.N))
         {
-           RangeSpawner.instance.RemoveFollower(RangeSpawner.SpawnedObjects[Random.Range(0, RangeSpawner.SpawnedObjects.Count)]);
-           FollowerCounter.instance.SubtractFollower(FollowerCounter.followerList[Random.Range(0, FollowerCounter.followerList.Count)]);
+            RangeSpawner.instance.RemoveFollower(RangeSpawner.SpawnedObjects[Random.Range(0, RangeSpawner.SpawnedObjects.Count)]);
+            
+            List<GameObject> followerList = FollowerCounter.instance.GetFollowerList();
+            FollowerCounter.instance.SubtractFollower(followerList[Random.Range(0, followerList.Count)]);
         }
 
         //Toggle between been invulnerable or not

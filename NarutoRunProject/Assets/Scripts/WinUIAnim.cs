@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,10 +5,12 @@ using UnityEngine.UI;
 public class WinUIAnim : MonoBehaviour
 {
     [SerializeField] private float minTargetDist = 0.2f;
-    public RectTransform[] objectsToMove;
-    public RectTransform[] InitialPoints;
-    public RectTransform[] FinalPoints;
-    public Image[] ObjectsToAppear;
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float appearSpeed = 20f;
+    [SerializeField] private RectTransform[] objectsToMove;
+    [SerializeField] private RectTransform[] InitialPoints;
+    [SerializeField] private RectTransform[] FinalPoints;
+    [SerializeField] private Image[] ObjectsToAppear;
     
     public static WinUIAnim instance;
     
@@ -22,32 +23,33 @@ public class WinUIAnim : MonoBehaviour
 
     public void Hide()
     {
-        for (int i = 0; i < ObjectsToAppear.Length; i++)
+        foreach (Image img in ObjectsToAppear)
         {
-            ObjectsToAppear[i].color = Color.clear;
-            ObjectsToAppear[i].gameObject.SetActive(false);
+            img.color = Color.clear;
+            img.gameObject.SetActive(false);
         }
 
         for(int i = 0; i < objectsToMove.Length; i++)
         {
-            if (objectsToMove[i].localPosition != InitialPoints[i].localPosition)
-            {
-                StartCoroutine(MoveCounter(InitialPoints[i].localPosition));
-            }
+            if (objectsToMove[i].localPosition == InitialPoints[i].localPosition) continue;
+            
+            StartCoroutine(MoveCounter(InitialPoints[i].localPosition));
         }
     }
 
     public void StartAnimation()
     {
-        for(int i = 0; i < ObjectsToAppear.Length; i++)
+        foreach (Image img in ObjectsToAppear)
         {
-            ObjectsToAppear[i].gameObject.SetActive(true);
+            img.gameObject.SetActive(true);
         }
+
         iterations = 0;
         StartCoroutine(SmoothAppear());
-        for(int i = 0; i < FinalPoints.Length; i++)
+
+        foreach (RectTransform rectTransform in FinalPoints)
         {
-            StartCoroutine(MoveCounter(FinalPoints[i].localPosition));
+            StartCoroutine(MoveCounter(rectTransform.localPosition));
         }
     }
 
@@ -58,7 +60,7 @@ public class WinUIAnim : MonoBehaviour
         {
             if (ObjectsToAppear[iterations].color != Color.white)
             {
-                ObjectsToAppear[iterations].color = Color.Lerp(ObjectsToAppear[iterations].color, Color.white, Time.deltaTime * 20);
+                ObjectsToAppear[iterations].color = Color.Lerp(ObjectsToAppear[iterations].color, Color.white, Time.deltaTime * appearSpeed);
                 StartCoroutine(SmoothAppear());
             }
             else
@@ -76,16 +78,17 @@ public class WinUIAnim : MonoBehaviour
     IEnumerator MoveCounter(Vector2 Target)
     {
         yield return new WaitForSeconds(Time.deltaTime);
-        for(int i = 0; i < objectsToMove.Length; i++)
+
+        foreach (RectTransform rectTransform in objectsToMove)
         {
-            if (Vector2.Distance(objectsToMove[i].localPosition, Target) > minTargetDist)
+            if (Vector2.Distance(rectTransform.localPosition, Target) > minTargetDist)
             {
-                objectsToMove[i].localPosition = Vector2.Lerp(objectsToMove[i].localPosition, Target, Time.deltaTime * 5);
+                rectTransform.localPosition = Vector2.Lerp(rectTransform.localPosition, Target, Time.deltaTime * moveSpeed);
                 StartCoroutine(MoveCounter(Target));
             }
             else
             {
-                objectsToMove[i].localPosition = Target;
+                rectTransform.localPosition = Target;
                 StopCoroutine(MoveCounter(Target));
             }
         }
