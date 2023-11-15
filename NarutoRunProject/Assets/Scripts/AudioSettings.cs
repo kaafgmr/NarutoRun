@@ -1,40 +1,64 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
+
+[Serializable]
+public class AudioChanger
+{
+    public string AudioName;
+    public Slider AudioSlider;
+}
 
 public class AudioSettings : MonoBehaviour
 {
-    public Slider MasterSlider;
-    public Slider MusicSlider;
-    public Slider SoundFXSlider;
+    public AudioMixer audioMixer;
+    public List<AudioChanger> audioChangerList;
 
-    private void Awake()
+    private void Start()
     {
         LoadAudioSettings();
     }
 
+    public void LoadAudioSettings()
+    {
+        foreach (AudioChanger audio in audioChangerList)
+        {
+            float volume = GetValueOf(audio.AudioName) <= 0f ? 1 : GetValueOf(audio.AudioName);
+
+            if (audio.AudioSlider != null)
+            {
+                audio.AudioSlider.value = volume;
+            }
+
+            SetAudioTo(audio.AudioName, volume);
+        }
+    }
+
     public void SaveAudioSettings()
     {
-        PlayerPrefs.SetFloat("MasterVolume", MasterSlider.value);
-        PlayerPrefs.SetFloat("MusicVolume", MusicSlider.value);
-        PlayerPrefs.SetFloat("SoundFXVolume", SoundFXSlider.value);
+        foreach (AudioChanger audio in audioChangerList)
+        {
+            SetAudioTo(audio.AudioName, audio.AudioSlider.value);
+        }
 
         PlayerPrefs.Save();
     }
-
-    public void LoadAudioSettings()
-    {
-        MasterSlider.value = PlayerPrefs.GetFloat("MasterVolume");
-        MusicSlider.value = PlayerPrefs.GetFloat("MusicVolume");
-        SoundFXSlider.value = PlayerPrefs.GetFloat("SoundFXVolume");
-    }
-
     public void SetAudioTo(string name, float value)
     {
         PlayerPrefs.SetFloat(name, value);
+
+        audioMixer.SetFloat(name, ToDecibels(value));
     }
 
-    public float getValueOf(string name)
+    public float GetValueOf(string name)
     {
         return PlayerPrefs.GetFloat(name);
+    }
+
+    private float ToDecibels(float value)
+    {
+        return Mathf.Log10(value) * 20;
     }
 }

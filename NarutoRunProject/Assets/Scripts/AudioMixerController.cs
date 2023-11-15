@@ -6,13 +6,13 @@ public class AudioMixerController : MonoBehaviour
     public AudioMixer audioMixer;
     public string AudioName;
 
-    private void Start()
-    {
-        audioMixer.SetFloat(AudioName, Mathf.Log10(PlayerPrefs.GetFloat($"{AudioName}Volume")) * 20);
-    }
-
     public void SetVolume(float value)
     {
-        audioMixer.SetFloat(AudioName, Mathf.Log10(value) * 20);
+        audioMixer.SetFloat(AudioName, ToDecibels(value));
+    }
+
+    private float ToDecibels(float value)
+    {
+        return Mathf.Log10(value) * 20;
     }
 }

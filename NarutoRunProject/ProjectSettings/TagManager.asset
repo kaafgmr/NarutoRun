@@ -47,6 +47,9 @@ TagManager:
   - name: UI
     uniqueID: 1356129795
     locked: 0
+  - name: Settings
+    uniqueID: 1633461011
+    locked: 0
   - name: LoadingScreen
     uniqueID: 3791841311
     locked: 0

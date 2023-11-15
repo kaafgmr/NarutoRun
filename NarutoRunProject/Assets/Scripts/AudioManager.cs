@@ -46,29 +46,31 @@ public class AudioManager : MonoBehaviour
 
 	void Awake()
 	{
-		if (instance != null)
-		{
-			if (instance != this)
-			{
-				Destroy(gameObject);
-			}
-		}
-		else
-		{
-			instance = this;
-			DontDestroyOnLoad(this);
-		}
-	}
+        if (instance != null)
+        {
+            if (instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(this);
+        }
 
-	void Start()
+        InitSounds();
+    }
+
+	private void InitSounds()
 	{
-		for (int i = 0; i < sounds.Length; i++)
-		{
-			GameObject _go = new GameObject("Sound_" + i + "_" + sounds[i].name);
-			_go.transform.SetParent(this.transform);
-			sounds[i].SetSource(_go.AddComponent<AudioSource>());
-		}
-	}
+        for (int i = 0; i < sounds.Length; i++)
+        {
+            GameObject _go = new GameObject("Sound_" + i + "_" + sounds[i].name);
+            _go.transform.SetParent(transform);
+            sounds[i].SetSource(_go.AddComponent<AudioSource>());
+        }
+    }
 
 	public void PlaySound(string _name)
 	{
