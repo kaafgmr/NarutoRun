@@ -34,7 +34,7 @@ public class FollowerCounter : MonoBehaviour
 
     public void Init()
     {
-        DisableAllFollowers();
+        RemoveAllFollowers();
         UpdateFollowersText();
     }
 
@@ -60,6 +60,12 @@ public class FollowerCounter : MonoBehaviour
         {
             followerList[i].GetComponent<FollowerBehaviour>().DeSpawn();
         }
+    }
+
+    public void RemoveAllFollowers()
+    {
+        DisableAllFollowers();
+        followerList.Clear();
     }
 
     public int GetCurrentFollowers()

@@ -10,15 +10,16 @@ public class RangeSpawner : MonoBehaviour
     public float minimumTimeRange;
     public float maximumTimeRange;
     public string[] ObjectsToSpawn;
+    public List<GameObject> SpawnedObjects;
+    
     public static RangeSpawner instance;
-    public static List<GameObject> SpawnedObjects;
 
     private bool canSpawn;
 
     private void Start()
     {
-        BurstAmount = 1;
         instance = this;
+        BurstAmount = 1;
         canSpawn = true;
         SpawnedObjects = new List<GameObject>();
     }

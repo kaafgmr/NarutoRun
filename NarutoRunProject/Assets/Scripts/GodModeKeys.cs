@@ -34,7 +34,8 @@ public class GodModeKeys : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.N))
         {
-            RangeSpawner.instance.RemoveFollower(RangeSpawner.SpawnedObjects[Random.Range(0, RangeSpawner.SpawnedObjects.Count)]);
+            List<GameObject> spawnedObjects = RangeSpawner.instance.SpawnedObjects;
+            RangeSpawner.instance.RemoveFollower(spawnedObjects[Random.Range(0, spawnedObjects.Count)]);
             
             List<GameObject> followerList = FollowerCounter.instance.GetFollowerList();
             FollowerCounter.instance.SubtractFollower(followerList[Random.Range(0, followerList.Count)]);

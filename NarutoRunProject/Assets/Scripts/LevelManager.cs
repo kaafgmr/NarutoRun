@@ -2,20 +2,55 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public string LevelSong;
+    public string levelSong;
     public int minimunFollowers;
-    public float WhenToSpawnFinalFloor;
-    public PlayerController Player;
-    public Transform PlayerFinalPos;
+    public float whenToSpawnFinalFloor;
+    public PlayerController player;
+    public Transform playerFinalPos;
+    public Quaternion playerFinalRotation;
     public WinUIAnim winUIAnim;
     public WinUIAnim loseUIAnim;
-    
-    
+
+    private Vector3 defaultPlayerFinalPos;
+    private Quaternion defaultPlayerFinalRotation;
+
     public static LevelManager instance;
 
     private void Awake()
     {
         instance = this;
+        defaultPlayerFinalPos = playerFinalPos.position;
+        defaultPlayerFinalRotation = Quaternion.Euler(0, 180, 0);
+    }
+
+    public void InitializeLevel()
+    {
+        if (AudioManager.instance != null)
+        {
+            AudioManager.instance.PlayMusic(levelSong);
+        }
+
+        player.InitPlayerToPlay();
+        playerFinalPos.position = defaultPlayerFinalPos;
+        playerFinalRotation = defaultPlayerFinalRotation;
+
+        CanvasTextChanger.instance.Showtext();
+        FollowerCounter.instance.Init();
+        CameraPositions.instance.ChangePositionTo("Playing");
+
+        if (winUIAnim != null)
+        {
+            winUIAnim.Hide();
+        }
+        if (loseUIAnim != null)
+        {
+            loseUIAnim.Hide();
+        }
+
+        SpawnerBehaviour.instance.RemoveAllFloors();
+        StartSpawningFloors();
+        StartSpawningFollowers();
+        SpawnerBehaviour.instance.Init();
     }
 
     public void StartSpawningFloors()
@@ -29,8 +64,6 @@ public class LevelManager : MonoBehaviour
         {
             PointsSpawner.Instace.StartSpawning();
         }
-
-        RangeSpawner.instance.StartSpawning();
     }
 
     public void StopSpawningFloors()
@@ -43,7 +76,6 @@ public class LevelManager : MonoBehaviour
         {
             PointsSpawner.Instace.StopSpawning();
         }
-        RangeSpawner.instance.StopSpawning();
     }
 
     public void StartSpawningNextFloors()
@@ -55,76 +87,61 @@ public class LevelManager : MonoBehaviour
     {
         DeSpawnerBehaviour.Instance.SetCanSpawnFloor(false);
     }
-
-    public void InitializeLevel()
+    public void StartSpawningFollowers()
     {
-        if(AudioManager.instance != null)
-        {
-            AudioManager.instance.PlayMusic(LevelSong);
-        }
+        RangeSpawner.instance.StartSpawning();
+    }
 
-        Player.InitPlayerToPlay();
-
-        CanvasTextChanger.instance.Showtext();
-        FollowerCounter.instance.Init();
-        CameraPositions.instance.ChangePositionTo("Playing");
-
-        if(winUIAnim != null)
-        {
-            winUIAnim.Hide();
-        }
-        if(loseUIAnim != null)
-        {
-            loseUIAnim.Hide();
-        }
-
-        SpawnerBehaviour.instance.RemoveAllFloors();
-        StartSpawningFloors();
-        SpawnerBehaviour.instance.Init();
+    public void StopSpawningFollowers()
+    {
+        RangeSpawner.instance.StopSpawning();
     }
 
     public void Freeze()
     {
         StopSpawningFloors();
         StopSpawningNextFloors();
+        StopSpawningFollowers();
         SpawnerBehaviour.instance.FreezeAllFloors();
-        Player.Idle();
+        player.Idle();
     }
 
     public void Unfreeze()
     {
         StartSpawningFloors();
         StartSpawningNextFloors();
+        StartSpawningFollowers();
         SpawnerBehaviour.instance.UnFreezeAllFloors();
-        Player.StartRunning();
-    }
-
-    public void Finished()
-    {
-        StopSpawningFloors();
-        SpawnerBehaviour.instance.FreezeAllFloors();
-        RemoveAllFollowers();
-        CameraPositions.instance.ChangePositionTo("Finish");
-        Player.transform.SetPositionAndRotation(PlayerFinalPos.position, Quaternion.Euler(0, 180, 0));
+        player.StartRunning();
     }
 
     private void RemoveAllFollowers()
     {
         FollowerCounter.instance.DisableAllFollowers();
-        RangeSpawner.instance.RemoveNotPickedFollowers();
+        RangeSpawner.instance.CleanObjects();
+    }
+
+    public void Finished()
+    {
+        StopSpawningFollowers();
+        RemoveAllFollowers();
+        StopSpawningFloors();
+        SpawnerBehaviour.instance.FreezeAllFloors();
+        CameraPositions.instance.ChangePositionTo("Finish");
+        player.MoveToFinalPosition(playerFinalPos.position, playerFinalRotation);
     }
 
     public void Win()
     {
         Finished();
-        Player.Win();
+        player.Win();
         winUIAnim.StartAnimation();
     }
 
     public void Lose()
     {
         Finished();
-        Player.Lose();
+        player.Lose();
         loseUIAnim.StartAnimation();
     }
 }

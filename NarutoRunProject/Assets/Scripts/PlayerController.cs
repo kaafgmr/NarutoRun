@@ -98,4 +98,9 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Lose", true);
         SetCanMove(false);
     }
+
+    public void MoveToFinalPosition(Vector3 position, Quaternion rotation)
+    {
+        transform.SetPositionAndRotation(position, rotation);
+    }
 }

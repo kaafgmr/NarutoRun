@@ -945,11 +945,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc27fca56c2722346b99353c1009238d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelSong: Level1Song
+  levelSong: Level1Song
   minimunFollowers: 4
-  WhenToSpawnFinalFloor: 2
-  Player: {fileID: 3432870696122329610}
-  PlayerFinalPos: {fileID: 1751211094}
+  whenToSpawnFinalFloor: 2
+  player: {fileID: 3432870696122329610}
+  playerFinalPos: {fileID: 1751211094}
+  playerFinalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   winUIAnim: {fileID: 1961754625}
   loseUIAnim: {fileID: 1235016987}
 --- !u!4 &518446131
@@ -2053,9 +2054,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstPoint: {fileID: 803629705}
   secondPoint: {fileID: 492774570}
-  BurstAmount: 0
-  minimumTimeRange: 1
-  maximumTimeRange: 2
+  BurstAmount: 1
+  minimumTimeRange: 0.5
+  maximumTimeRange: 1
   ObjectsToSpawn:
   - Kunai
 --- !u!4 &1348795777

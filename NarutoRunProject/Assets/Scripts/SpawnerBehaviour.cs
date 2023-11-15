@@ -25,7 +25,7 @@ public class SpawnerBehaviour : MonoBehaviour
     public void Init()
     {
         endPoint = whereToSpawnFirst;
-        timeToSpawnFinalfloor = LevelManager.instance.WhenToSpawnFinalFloor;
+        timeToSpawnFinalfloor = LevelManager.instance.whenToSpawnFinalFloor;
         StopAllCoroutines();
         RemoveAllFloors();
         for (int i = 0; i < amountToPreload; i++)
