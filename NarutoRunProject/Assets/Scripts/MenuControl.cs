@@ -14,70 +14,26 @@ public class MenuControl : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        if(LoadScreenPanel != null)
-        {
-            LoadScreenPanel.SetActive(false);
-        }
-    }
-
-    public void PlayGame()
-    {
-        SceneManager.LoadScene("Game");
-    }
-
-    public void Credits()
-    {
-        SceneManager.LoadScene("Credits");
-    }
-
-    public void Instructions()
-    {
-        SceneManager.LoadScene("Instructions");
-    }
-
-    public void Controls()
-    {
-        SceneManager.LoadScene("Controls");
-    }
-
-    public void Settings()
-    {
-        SceneManager.LoadScene("Settings");
-    }
-
-    public void MainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    public void GameOver()
-    {
-        SceneManager.LoadScene("GameOver");
-    }
-
-    public void WinGame()
-    {
-        SceneManager.LoadScene("Win");
-    }
-
-    public void LoadLevel(int levelNumber)
-    {
-        SceneManager.LoadScene("Level" + levelNumber);
+        if (LoadScreenPanel == null) { return; }
+        
+        LoadScreenPanel.SetActive(false);   
     }
 
     public void LoadScene(string name)
     {
+        Time.timeScale = 1.0f;
         SceneManager.LoadScene(name);
     }
 
     public void LoadWithProgressBar(string sceneName)
     {
+        Time.timeScale = 1.0f;
         StartCoroutine(LoadSceneAsync(sceneName));
     }
 
     IEnumerator LoadSceneAsync(string SceneName)
     {
-        AsyncOperation loader = SceneManager.LoadSceneAsync(SceneName);
+        AsyncOperation loader = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Single);
 
         LoadScreenPanel.SetActive(true);
         while(!loader.isDone)
@@ -92,9 +48,9 @@ public class MenuControl : MonoBehaviour
         }
     }
 
-
     public void Exit()
     {
+        Time.timeScale = 1.0f;
         #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
         #else

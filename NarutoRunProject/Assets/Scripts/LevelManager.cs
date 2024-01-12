@@ -10,6 +10,7 @@ public class LevelManager : MonoBehaviour
     public Quaternion playerFinalRotation;
     public WinUIAnim winUIAnim;
     public WinUIAnim loseUIAnim;
+    public bool finishedLevel;
 
     private Vector3 defaultPlayerFinalPos;
     private Quaternion defaultPlayerFinalRotation;
@@ -19,12 +20,15 @@ public class LevelManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        finishedLevel = false;
         defaultPlayerFinalPos = playerFinalPos.position;
         defaultPlayerFinalRotation = Quaternion.Euler(0, 180, 0);
     }
 
     public void InitializeLevel()
     {
+        finishedLevel = false;
+
         if (AudioManager.instance != null)
         {
             AudioManager.instance.PlayMusic(levelSong);
@@ -129,6 +133,7 @@ public class LevelManager : MonoBehaviour
         SpawnerBehaviour.instance.FreezeAllFloors();
         CameraPositions.instance.ChangePositionTo("Finish");
         player.MoveToFinalPosition(playerFinalPos.position, playerFinalRotation);
+        finishedLevel = true;
     }
 
     public void Win()
@@ -143,5 +148,10 @@ public class LevelManager : MonoBehaviour
         Finished();
         player.Lose();
         loseUIAnim.StartAnimation();
+    }
+
+    public void Pause()
+    {
+        player.Idle();
     }
 }

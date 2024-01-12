@@ -695,14 +695,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 566525768}
         m_TargetAssemblyTypeName: MenuControl, Assembly-CSharp
-        m_MethodName: Credits
-        m_Mode: 1
+        m_MethodName: LoadScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Credits
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &384874575
@@ -1872,14 +1872,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 566525768}
         m_TargetAssemblyTypeName: MenuControl, Assembly-CSharp
-        m_MethodName: Settings
-        m_Mode: 1
+        m_MethodName: LoadScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Settings
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1303085012
@@ -2010,14 +2010,14 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 566525768}
         m_TargetAssemblyTypeName: MenuControl, Assembly-CSharp
-        m_MethodName: Controls
-        m_Mode: 1
+        m_MethodName: LoadScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Controls
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1332569015

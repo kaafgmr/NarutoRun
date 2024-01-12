@@ -16,15 +16,15 @@ public class GodModeKeys : MonoBehaviour
         //Load levels
         if(Input.GetKeyDown(KeyCode.Alpha1) && SceneManager.GetActiveScene().name != "Level1")
         {
-            MenuControl.instance.LoadLevel(1);
+            MenuControl.instance.LoadScene("Level1");
         }
         else if(Input.GetKeyDown(KeyCode.Alpha2) && SceneManager.GetActiveScene().name != "Level2")
         {
-            MenuControl.instance.LoadLevel(2);
+            MenuControl.instance.LoadScene("Level2");
         }
         else if (Input.GetKeyDown(KeyCode.Alpha3) && SceneManager.GetActiveScene().name != "Level3")
         {
-            MenuControl.instance.LoadLevel(3);
+            MenuControl.instance.LoadScene("Level3");
         }
 
         //Add/Remove followers
