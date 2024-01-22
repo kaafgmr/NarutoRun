@@ -212,8 +212,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 39.96233, y: 1, z: 8.811058}
-  m_Center: {x: 0.05107689, y: 0, z: 3.905529}
+  m_Size: {x: 40, y: 10, z: 8}
+  m_Center: {x: 0, y: 0, z: 4}
 --- !u!4 &27676116
 Transform:
   m_ObjectHideFlags: 0
@@ -2155,6 +2155,7 @@ MonoBehaviour:
   winUIAnim: {fileID: 1961754625}
   loseUIAnim: {fileID: 1235016987}
   finishedLevel: 0
+  AttackLimitRigidBody: {fileID: 27676113}
 --- !u!4 &518446131
 Transform:
   m_ObjectHideFlags: 0

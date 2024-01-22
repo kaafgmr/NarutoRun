@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class FollowerBehaviour : MonoBehaviour
 {
-    [HideInInspector]public bool picked;
     public int damage = 1;
 
+    [HideInInspector]public bool picked;
     private ObjectsMoveBehaviour OB;
     private AddForce AF;
     private Animator anim;
@@ -78,6 +78,15 @@ public class FollowerBehaviour : MonoBehaviour
         AF.enabled = false;
         anim.SetBool("ObjectMode", false);
         anim.SetBool("FollowMode", true);
+
+        Rigidbody attackLimitRB = LevelManager.instance.AttackLimitRigidBody;
+        gameObject.TryGetComponent(out SpringJoint SJ);
+        if (SJ == null)
+        {
+            AddSpringJoint(attackLimitRB);
+        }
+
+        SJ.connectedBody = attackLimitRB;
     }
 
     public bool GetIsAttacking()
@@ -89,5 +98,6 @@ public class FollowerBehaviour : MonoBehaviour
     {
         gameObject.SetActive(false);
         picked = false;
+        attacking = false;
     }
 }

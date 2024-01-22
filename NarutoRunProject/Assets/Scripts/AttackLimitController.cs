@@ -6,8 +6,9 @@ public class AttackLimitController : MonoBehaviour
     {
         if (!collision.gameObject.TryGetComponent(out FollowerBehaviour FB)) return;
         if (!FB.GetIsAttacking()) return;
-        
+
         DisappearEffect.Instance.Disappear(FB.transform);
         FollowerCounter.instance.SubtractFollower(FB.gameObject);
+        FB.DeSpawn();
     }
 }

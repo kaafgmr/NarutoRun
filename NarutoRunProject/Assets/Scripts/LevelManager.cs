@@ -11,6 +11,7 @@ public class LevelManager : MonoBehaviour
     public WinUIAnim winUIAnim;
     public WinUIAnim loseUIAnim;
     public bool finishedLevel;
+    public Rigidbody AttackLimitRigidBody;
 
     private Vector3 defaultPlayerFinalPos;
     private Quaternion defaultPlayerFinalRotation;

@@ -11,10 +11,7 @@ public class DisappearEffect : MonoBehaviour
 
     public void Disappear(Transform Pos)
     {
-        GameObject DisappearFX = PoolingManager.Instance.GetPooledObject("DisappearFX");
-
-        DisappearFX.transform.position = Pos.position;
-        DisappearFX.GetComponent<ParticleSystem>().Stop();
-        DisappearFX.GetComponent<ParticleSystem>().Play();
+        GameObject disappearFX = PoolingManager.Instance.GetPooledObject("DisappearFX");
+        disappearFX.GetComponent<DisappearFXBehaviour>().Disappear(Pos);
     }
 }
