@@ -41,29 +41,17 @@ public class SpawnerBehaviour : MonoBehaviour
         GameObject Floor = PoolingManager.Instance.GetPooledObject(objectsToSpawn[RandomFloor]);
         Floor.GetComponent<ObjectsMoveBehaviour>().SetCanMove(true);
 
-        Transform FloorStart = Floor.GetComponent<FloorBehaviour>().floorStart;
-        Transform FloorEnd = Floor.GetComponent<FloorBehaviour>().floorEnd;
+        FloorBehaviour FB = Floor.GetComponent<FloorBehaviour>();
+        Transform FloorStart = FB.floorStart;
+        Transform FloorEnd = FB.floorEnd;
         float ObjectWidth = Vector3.Distance(Floor.transform.position, FloorStart.position);
 
         Floor.transform.position = endPoint.position;
         Floor.transform.position += Vector3.forward * ObjectWidth;
         endPoint = FloorEnd;
 
-        LargeTrashBehaviour LTB = Floor.GetComponentInChildren<LargeTrashBehaviour>();
-        SmallTrashBehaviour STB = Floor.GetComponentInChildren<SmallTrashBehaviour>();
-
-        if(LTB != null)
-        {
-            LTB.StopMoving();
-            LTB.ResetPos();
-        }
-        else if (STB != null)
-        {
-            STB.StopMoving();
-            STB.ResetPos();
-        }
-
         spawnedFloors.Add(Floor);
+        FB.Spawned();
     }
 
     public void SpawnNextFloor(GameObject oldFloor)

@@ -3,35 +3,40 @@ using UnityEngine;
 
 public class LargeTrashBehaviour : MonoBehaviour
 {
-    public Transform FinalPos;
-    private Transform FirstPos;
+    [SerializeField] private Transform startPos;
+    [SerializeField] private Transform finalPos;
+    [SerializeField] private FloorBehaviour thisFloor;
+    [SerializeField] private float minimalDist;
+    
 
-    private void Awake()
+    private void Start()
     {
-        FirstPos = transform;
+        thisFloor.OnSpawn.AddListener(ResetTrash);
+    }
+
+    private void ResetTrash()
+    {
+        StopMoving();
+        ResetPos();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<PlayerController>(out PlayerController PC))
+        if(other.TryGetComponent(out PlayerController PC))
         {
             StartCoroutine(Move());
         }
-        else
-        {
-            StopMoving();
-            ResetPos();
-        }
-
     }
 
     IEnumerator Move()
     {
         yield return new WaitForSeconds(Time.deltaTime);
 
-        if(transform.position != FinalPos.position)
+        float dist = Vector3.Distance(finalPos.position, transform.position);
+
+        if(dist > minimalDist)
         {
-            transform.position = Vector3.Lerp(transform.position, FinalPos.position, Time.deltaTime * Random.Range(1,2));
+            transform.position = Vector3.Lerp(transform.position, finalPos.position, Time.deltaTime * Random.Range(1,2));
             StartCoroutine(Move());
         }
         else
@@ -47,6 +52,6 @@ public class LargeTrashBehaviour : MonoBehaviour
 
     public void ResetPos()
     {
-        transform.position = FirstPos.position;
+        transform.position = startPos.position;
     }
 }

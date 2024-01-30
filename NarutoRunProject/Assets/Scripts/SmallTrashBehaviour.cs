@@ -3,33 +3,40 @@ using UnityEngine;
 
 public class SmallTrashBehaviour : MonoBehaviour
 {
-    public Transform FinalRotation;
-    private Transform FirstPos;
+    [SerializeField] private Transform finalRotation;
+    [SerializeField] private FloorBehaviour thisFloor;
+    [SerializeField] private float minAngle;
+    private Quaternion firstRot;
 
-    private void Awake()
+    private void Start()
     {
-        FirstPos = transform;
+        firstRot = transform.rotation;
+        thisFloor.OnSpawn.AddListener(ResetTrash);
+    }
+
+    private void ResetTrash()
+    {
+        StopMoving();
+        ResetRotation();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<PlayerController>(out PlayerController PC))
+        if(other.TryGetComponent(out PlayerController PC))
         {
             StartCoroutine(Fall());
-        }
-        else if(other.TryGetComponent<DeSpawnerBehaviour>(out DeSpawnerBehaviour DSP))
-        {
-            StopMoving();
-            ResetPos();
         }
     }
 
     IEnumerator Fall()
     {
         yield return new WaitForSeconds(Time.deltaTime);
-        if(transform.rotation != FinalRotation.rotation)
+
+        float angle = Quaternion.Angle(transform.rotation, finalRotation.rotation);
+
+        if(angle > minAngle)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, FinalRotation.rotation, Time.deltaTime * 10);
+            transform.rotation = Quaternion.Lerp(transform.rotation, finalRotation.rotation, Time.deltaTime * 10);
             StartCoroutine(Fall());
         }
         else
@@ -42,8 +49,8 @@ public class SmallTrashBehaviour : MonoBehaviour
     {
         StopAllCoroutines();
     }
-    public void ResetPos()
+    public void ResetRotation()
     {
-        transform.position = FirstPos.position;
+        transform.rotation = firstRot;
     }
 }

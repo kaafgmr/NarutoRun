@@ -256,7 +256,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4895998006242069638}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.53, y: 0, z: -13.4}
+  m_LocalPosition: {x: 12, y: 0, z: -13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -275,8 +275,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.966446, y: 6.71457, z: 3.8311205}
-  m_Center: {x: 0.35637665, y: 2.857285, z: 0.030357838}
+  m_Size: {x: 4, y: 7, z: 4}
+  m_Center: {x: 0.25, y: 3, z: 0}
 --- !u!114 &2230622780870955051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f158cfd63b2322439cea811035f07c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FinalRotation: {fileID: 6309519658935737425}
+  finalRotation: {fileID: 6309519658935737425}
+  thisFloor: {fileID: 7575016899944139539}
+  minAngle: 0.2
 --- !u!65 &4310400223084542561
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -301,8 +303,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 13.943962, y: 3.4190152, z: 3.6935863}
-  m_Center: {x: -5.008271, y: 1.2095076, z: -10.34}
+  m_Size: {x: 14, y: 4, z: 4}
+  m_Center: {x: -5, y: 1, z: -10}
 --- !u!114 &4234249096962257120
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7400,6 +7402,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floorStart: {fileID: 4136364913818897540}
   floorEnd: {fileID: 8198788687064118479}
+  OnSpawn:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &6342377497321923042
 PrefabInstance:
   m_ObjectHideFlags: 0
