@@ -9,6 +9,7 @@ public class AttackLimitController : MonoBehaviour
 
         DisappearEffect.Instance.Disappear(FB.transform);
         FollowerCounter.instance.SubtractFollower(FB.gameObject);
+        FB.ObjectMode();
         FB.DeSpawn();
     }
 }

@@ -1,13 +1,14 @@
 using System.Collections;
-using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine;
 
 public class PointsSpawner : MonoBehaviour
 {
-    public float WhenToSpawn;
-    public bool SpawnInEveryPosition;
-    public string[] ObjectsToSpawn;
-    public Transform[] PointsList;
+    [SerializeField] private float spawnEachSecs;
+    [SerializeField] private bool SpawnInEveryPosition;
+    [SerializeField] private string[] ObjectsToSpawn;
+    [SerializeField] private Transform[] PointsList;
+
     public UnityEvent Spawned;
 
     public static PointsSpawner Instace;
@@ -55,7 +56,7 @@ public class PointsSpawner : MonoBehaviour
                 SpawnAtRandomPos();
             }
         }
-        yield return new WaitForSeconds(WhenToSpawn);
+        yield return new WaitForSeconds(spawnEachSecs);
         StartCoroutine(SpawnTimer());
     }
 

@@ -9,9 +9,11 @@ public class FollowerBehaviour : MonoBehaviour
     private AddForce AF;
     private Animator anim;
     private bool attacking;
+    private Rigidbody attackLimitRB;
 
     private void Awake()
     {
+        attackLimitRB = LevelManager.instance.AttackLimitRigidBody;
         OB = GetComponent<ObjectsMoveBehaviour>();
         AF = GetComponent<AddForce>();
         anim = GetComponent<Animator>();
@@ -49,6 +51,7 @@ public class FollowerBehaviour : MonoBehaviour
     {
         OB.enabled = true;
         AF.enabled = false;
+        attacking = false;
         picked = false;
         anim.SetBool("ObjectMode", true);
         anim.SetBool("FollowMode", false);
@@ -79,7 +82,7 @@ public class FollowerBehaviour : MonoBehaviour
         anim.SetBool("ObjectMode", false);
         anim.SetBool("FollowMode", true);
 
-        Rigidbody attackLimitRB = LevelManager.instance.AttackLimitRigidBody;
+        
         gameObject.TryGetComponent(out SpringJoint SJ);
         if (SJ == null)
         {

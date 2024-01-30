@@ -55,6 +55,7 @@ public class LevelManager : MonoBehaviour
         SpawnerBehaviour.instance.RemoveAllFloors();
         StartSpawningFloors();
         StartSpawningFollowers();
+        StartSpawningObstacles();
         SpawnerBehaviour.instance.Init();
     }
 
@@ -102,11 +103,28 @@ public class LevelManager : MonoBehaviour
         RangeSpawner.instance.StopSpawning();
     }
 
+    public void StartSpawningObstacles()
+    {
+        if (PointsSpawner.Instace != null)
+        {
+            PointsSpawner.Instace.StartSpawning();
+        }
+    }
+
+    public void StopSpawningObstacles()
+    {
+        if (PointsSpawner.Instace != null)
+        {
+            PointsSpawner.Instace.StopSpawning();
+        }
+    }
+
     public void Freeze()
     {
         StopSpawningFloors();
         StopSpawningNextFloors();
         StopSpawningFollowers();
+        StopSpawningObstacles();
         SpawnerBehaviour.instance.FreezeAllFloors();
         player.Idle();
     }
@@ -116,6 +134,7 @@ public class LevelManager : MonoBehaviour
         StartSpawningFloors();
         StartSpawningNextFloors();
         StartSpawningFollowers();
+        StartSpawningObstacles();
         SpawnerBehaviour.instance.UnFreezeAllFloors();
         player.StartRunning();
     }
@@ -131,6 +150,7 @@ public class LevelManager : MonoBehaviour
         StopSpawningFollowers();
         RemoveAllFollowers();
         StopSpawningFloors();
+        StopSpawningObstacles();
         SpawnerBehaviour.instance.FreezeAllFloors();
         CameraPositions.instance.ChangePositionTo("Finish");
         player.MoveToFinalPosition(playerFinalPos.position, playerFinalRotation);

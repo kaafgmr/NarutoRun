@@ -13,9 +13,11 @@ public class PlayerController : MonoBehaviour
     private MovementBehaviour MB;
     private bool canMove;
     private Animator animator;
+    private Rigidbody RB;
 
     private void Start()
     {
+        RB = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         MB = GetComponent<MovementBehaviour>();
         MB.Init(speed);
@@ -32,29 +34,34 @@ public class PlayerController : MonoBehaviour
         {
             float Distance = Vector3.Distance(transform.position, mapCenter.position);
 
-            if (Distance > minDistToCenter)
-            {
-                transform.position = Vector3.Lerp(transform.position, mapCenter.position, Time.deltaTime * 2);
-            }
-            else
-            {
-                transform.position = mapCenter.position;
-            }
+            if (Distance <= minDistToCenter) return;
+            
+            Vector3 lerpPos = Vector3.Lerp(transform.position, mapCenter.position, Time.deltaTime * 2);
+            direction = (lerpPos - transform.position).normalized;   
         }
 
-        List<GameObject> followerList = FollowerCounter.instance.GetFollowerList();
-
-        if (Input.GetKeyDown(KeyCode.Space) && followerList.Count > 0)
+        if (Input.GetKeyDown(KeyCode.Space) && canMove)
         {
+            List<GameObject> followerList = FollowerCounter.instance.GetFollowerList();
+
+            if (followerList.Count <= 0) return;
+
             FollowerBehaviour objToAttack = followerList[Random.Range(0, followerList.Count)].GetComponent<FollowerBehaviour>();
             objToAttack.AttackMode();
-            followerList.Remove(objToAttack.gameObject);
+            FollowerCounter.instance.SubtractFollower(objToAttack.gameObject);
         }
     }
 
     private void FixedUpdate()
     {
-        MB.MoveRB3D(direction);
+        if (canMove)
+        {
+            MB.MoveRB3D(direction);
+        }
+        else
+        {
+            MB.MoveRB3D(Vector3.zero);
+        }
     }
 
     public void SetCanMove(bool value)
@@ -81,6 +88,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Victory", false);
         animator.SetBool("Lose", false);
         SetCanMove(false);
+        RB.velocity = Vector3.zero;
     }
 
     public void Win()

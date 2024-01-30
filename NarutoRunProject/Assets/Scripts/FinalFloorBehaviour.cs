@@ -12,8 +12,6 @@ public class FinalFloorBehaviour : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         OMB.SetCanMove(false);
-        Quaternion defaultRotation = LevelManager.instance.playerFinalRotation;
-        LevelManager.instance.player.MoveToFinalPosition(MovePlayer.position, defaultRotation);
 
         if (FollowerCounter.instance.GetCurrentFollowers() >= LevelManager.instance.minimunFollowers)
         {

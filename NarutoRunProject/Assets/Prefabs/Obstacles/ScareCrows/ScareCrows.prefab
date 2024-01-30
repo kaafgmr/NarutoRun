@@ -98,7 +98,6 @@ GameObject:
   - component: {fileID: 5841012686138383728}
   - component: {fileID: 6901988912581467424}
   - component: {fileID: 3252307790873999738}
-  - component: {fileID: 2239414322087227319}
   - component: {fileID: 4115751019911337794}
   - component: {fileID: 1212054855462290004}
   - component: {fileID: -2406682411085690815}
@@ -179,18 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ee48c843d4c9de4a820f7b833a2ad00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2239414322087227319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5578192700014398325}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b36f987abee0b124fa71f31f19f07e48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  speed: 40
 --- !u!114 &4115751019911337794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d152c156f154214ea58ff7fb73c5cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 2
+  MaxHealth: 3
   OnHurt:
     m_PersistentCalls:
       m_Calls: []
@@ -216,10 +204,34 @@ MonoBehaviour:
   OnDie:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2239414322087227319}
-        m_TargetAssemblyTypeName: DestroyDisableObjects, Assembly-CSharp
-        m_MethodName: DisableObject
+      - m_Target: {fileID: 4031451759017124543}
+        m_TargetAssemblyTypeName: DisappearEffect, Assembly-CSharp
+        m_MethodName: Disappear
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 5578192700014398324}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Transform, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4115751019911337794}
+        m_TargetAssemblyTypeName: HealthBehaviour, Assembly-CSharp
+        m_MethodName: Reset
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5578192700014398325}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
