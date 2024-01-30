@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.Events;
 using UnityEngine;
@@ -13,8 +14,11 @@ public class PointsSpawner : MonoBehaviour
 
     public static PointsSpawner Instace;
 
+    private List<GameObject> spawnedObjects;
+
     private void Start()
     {
+        spawnedObjects = new List<GameObject>();
         Instace = this;
     }
 
@@ -25,9 +29,9 @@ public class PointsSpawner : MonoBehaviour
 
         int randomPosition = Random.Range(0, PointsList.Length);
         Object.transform.position = PointsList[randomPosition].position;
+        AddToList(Object);
         Spawned.Invoke();
     }
-
 
     public void SpawnInEveryPoint()
     {
@@ -37,26 +41,24 @@ public class PointsSpawner : MonoBehaviour
             GameObject Object = PoolingManager.Instance.GetPooledObject(ObjectsToSpawn[randomObject].ToString());
 
             Object.transform.position = PointsList[i].position;
-            Object.GetComponent<HealthBehaviour>().Reset();
+            AddToList(Object);
             Spawned.Invoke();
         }
     }
 
-
     IEnumerator SpawnTimer()
     {
-        if(FollowerCounter.instance.GetFollowerList().Count > 1)
-        {
-            if(SpawnInEveryPosition)
-            {
-                SpawnInEveryPoint();
-            }
-            else
-            {
-                SpawnAtRandomPos();
-            }
-        }
         yield return new WaitForSeconds(spawnEachSecs);
+
+        if(SpawnInEveryPosition)
+        {
+            SpawnInEveryPoint();
+        }
+        else
+        {
+            SpawnAtRandomPos();
+        }
+
         StartCoroutine(SpawnTimer());
     }
 
@@ -68,5 +70,23 @@ public class PointsSpawner : MonoBehaviour
     public void StopSpawning()
     {
         StopAllCoroutines();
+    }
+
+    public void DisableSpawnedObjs()
+    {
+        for (int i = 0; i < spawnedObjects.Count; i++)
+        {
+            if (spawnedObjects[i].activeInHierarchy)
+            {
+                spawnedObjects[i].SetActive(false);
+            }
+        }
+    }
+
+    public void AddToList(GameObject obj)
+    {
+        if (spawnedObjects.Contains(obj)) return;
+
+        spawnedObjects.Add(obj);
     }
 }

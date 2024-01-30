@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class LevelManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class LevelManager : MonoBehaviour
 
     private Vector3 defaultPlayerFinalPos;
     private Quaternion defaultPlayerFinalRotation;
+
+    public UnityEvent OnWinLose;
 
     public static LevelManager instance;
 
@@ -119,6 +122,14 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void DisableObstacles()
+    {
+        if (PointsSpawner.Instace != null)
+        {
+            PointsSpawner.Instace.DisableSpawnedObjs();
+        }
+    }
+
     public void Freeze()
     {
         StopSpawningFloors();
@@ -151,10 +162,12 @@ public class LevelManager : MonoBehaviour
         RemoveAllFollowers();
         StopSpawningFloors();
         StopSpawningObstacles();
+        DisableObstacles();
         SpawnerBehaviour.instance.FreezeAllFloors();
         CameraPositions.instance.ChangePositionTo("Finish");
         player.MoveToFinalPosition(playerFinalPos.position, playerFinalRotation);
         finishedLevel = true;
+        OnWinLose.Invoke();
     }
 
     public void Win()

@@ -2,18 +2,26 @@ using UnityEngine;
 
 public class ScareCrowBehaviour : MonoBehaviour
 {
+    [SerializeField] private DisappearEffect DE;
+
     private HealthBehaviour HB;
 
-    private void Awake()
+    private void Start()
     {
         HB = GetComponent<HealthBehaviour>();
+        LevelManager.instance.OnWinLose.AddListener(DisappearCrow);
+    }
+
+    public void DisappearCrow()
+    {
+        DisappearEffect.Instance.Disappear(transform);
+        gameObject.SetActive(false);
     }
 
     public void Reset()
     {
         HB.Reset(); 
     }
-
 
     private void OnCollisionEnter(Collision collision)
     {
