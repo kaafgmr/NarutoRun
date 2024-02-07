@@ -22,9 +22,14 @@ public class LargeTrashBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out PlayerController PC))
+        if(other.TryGetComponent(out PlayerController _))
         {
             StartCoroutine(Move());
+        }
+
+        if (other.TryGetComponent(out DeSpawnerBehaviour _))
+        {
+            ResetTrash();
         }
     }
 
@@ -41,6 +46,7 @@ public class LargeTrashBehaviour : MonoBehaviour
         }
         else
         {
+            transform.position = finalPos.position;
             StopAllCoroutines();
         }
     }

@@ -40,8 +40,10 @@ public class PlayerController : MonoBehaviour
             direction = (lerpPos - transform.position).normalized;   
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && canMove)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("holii");
+            if (!canMove) return;
             List<GameObject> followerList = FollowerCounter.instance.GetFollowerList();
 
             if (followerList.Count <= 0) return;

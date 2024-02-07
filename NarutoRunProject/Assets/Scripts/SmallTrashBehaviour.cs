@@ -22,7 +22,7 @@ public class SmallTrashBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out PlayerController PC))
+        if(other.TryGetComponent(out PlayerController _))
         {
             StartCoroutine(Fall());
         }

@@ -2147,8 +2147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelSong: Level1Song
-  minimunFollowers: 4
-  whenToSpawnFinalFloor: 2
+  minimunFollowers: 10
+  whenToSpawnFinalFloor: 6
   player: {fileID: 3432870696122329610}
   playerFinalPos: {fileID: 1751211094}
   playerFinalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
@@ -2156,6 +2156,9 @@ MonoBehaviour:
   loseUIAnim: {fileID: 1235016987}
   finishedLevel: 0
   AttackLimitRigidBody: {fileID: 27676113}
+  OnWinLose:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &518446131
 Transform:
   m_ObjectHideFlags: 0
@@ -2671,7 +2674,7 @@ MonoBehaviour:
   whereToSpawnFirst: {fileID: 1525530080}
   objectsToSpawn:
   - ModernFloor
-  - ReversedModernFloor
+  - ModernFloorSmallTrash
 --- !u!4 &833019691
 Transform:
   m_ObjectHideFlags: 0
@@ -3341,9 +3344,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pooledLists:
   - Name: ModernFloor
-    objectToPool: {fileID: 65246190315021698, guid: 155f7fa81a60f0a45852e48413445e81, type: 3}
+    objectToPool: {fileID: 65246190315021698, guid: d3253e223e6b01d409564d5a7a140131, type: 3}
     amount: 10
-  - Name: ReversedModernFloor
+  - Name: ModernFloorSmallTrash
     objectToPool: {fileID: 8602309610648593415, guid: f0d8ca547fac3a7429ef5241ec28f8b5, type: 3}
     amount: 10
   - Name: Kunai
@@ -4071,8 +4074,8 @@ MonoBehaviour:
   firstPoint: {fileID: 803629705}
   secondPoint: {fileID: 492774570}
   BurstAmount: 1
-  minimumTimeRange: 0.5
-  maximumTimeRange: 1
+  minimumTimeRange: 1
+  maximumTimeRange: 2
   ObjectsToSpawn:
   - Kunai
   SpawnedObjects: []
@@ -4733,8 +4736,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 14, z: 29.199667}
-  m_Center: {x: -0.5, y: 7.278324, z: -4.420327}
+  m_Size: {x: 30, y: 14, z: 30}
+  m_Center: {x: -13, y: 7, z: -4}
 --- !u!54 &1639045383
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5203,8 +5206,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 13.897705, z: 29.199667}
-  m_Center: {x: 0.5, y: 7.278324, z: -4.420327}
+  m_Size: {x: 30, y: 14, z: 30}
+  m_Center: {x: 13, y: 7, z: -4}
 --- !u!54 &1862672919
 Rigidbody:
   m_ObjectHideFlags: 0
