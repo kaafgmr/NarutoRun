@@ -7,6 +7,10 @@ public class FinalFloorBehaviour : MonoBehaviour
     private void Start()
     {
         OMB = GetComponent<ObjectsMoveBehaviour>();
+        if (LevelManager.instance.finishedLevel)
+        {
+            OMB.SetCanMove(false);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
