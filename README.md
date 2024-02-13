@@ -1,8 +1,6 @@
 # About the project
 Naruto Run is a survival runner style game where you have to collect a certain amount of kunais in order to reach the end of each level and win.
 
-## ![Click here to play the game](https://kaaf.itch.io/narutorun)
-
 ## Showcase
 ![](https://github.com/kaafgmr/NarutoRun/blob/main/Itchio/showcase.gif)
 
